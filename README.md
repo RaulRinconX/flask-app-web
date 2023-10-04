@@ -2,6 +2,10 @@
 
 python -m virtualenv env
 
+## Activar el entorno virtual:
+
+. venv/bin/activate
+
 ## Para instalar los paquetes necesarios:
 
 pip install -r requirements.txt
