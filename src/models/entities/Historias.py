@@ -1,3 +1,5 @@
+from utils.dateformat import DateFormat
+
 class Historias():
 
     def __init__(self,id,nombre,cedula,fecha_nacimiento,tipo_sangre,fecha_examen,enfermedades,medicamentos,alergia) -> None:
@@ -16,9 +18,9 @@ class Historias():
             'id': self.id,
             'nombre': self.nombre,
             'cedula': self.cedula,
-            'fecha_nacimiento': self.fecha_nacimiento,
+            'fecha_nacimiento': DateFormat.convert_date(self.fecha_nacimiento),
             'tipo_sangre': self.tipo_sangre,
-            'fecha_examen': self.fecha_examen,
+            'fecha_examen': DateFormat.convert_date(self.fecha_examen),
             'enfermedades': self.enfermedades,
             'medicamentos': self.medicamentos,
             'alergia': self.alergia
