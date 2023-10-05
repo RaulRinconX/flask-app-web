@@ -4,7 +4,7 @@ python -m virtualenv env
 
 ## Activar el entorno virtual:
 
-. venv/bin/activate
+. venv\Scripts\activate
 
 ## Para instalar los paquetes necesarios:
 
