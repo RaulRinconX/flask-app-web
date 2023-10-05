@@ -1,10 +1,17 @@
 ## Primero, crear un entorno virtual:
 
-python -m virtualenv env
+python3 -m virtualenv env
+
+pip3 install virtualenv
+
+sudo apt install python3-venv
 
 ## Activar el entorno virtual:
 
-. venv\Scripts\activate
+### Linux
+ . venv/bin/activate
+### Windows
+ .venv\Scripts\activate
 
 ## Para instalar los paquetes necesarios:
 
