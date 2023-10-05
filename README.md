@@ -16,9 +16,7 @@ python3 -m virtualenv venv
 
 ## Para instalar los paquetes necesarios:
 
-pip install Flask
-pip install python-decouple
-pip install psycopg2-binary
+pip install -r requirements.txt
 
 ## Configuracion para VM app.run:
 
