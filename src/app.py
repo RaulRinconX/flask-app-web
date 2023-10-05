@@ -34,6 +34,7 @@ if __name__ == "__main__":
       #Blueprints
       app.register_blueprint(historias.main, url_prefix='/api/historias')
 
-      #ErroHandlers
+      #ErrorHandlers
       app.register_error_handler(404, page_not_found)
+      app.register_error_handler(401, unauthorized)
       app.run()
