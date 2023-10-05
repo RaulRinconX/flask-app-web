@@ -17,6 +17,10 @@ sudo apt install python3-venv
 
 pip install -r requirements.txt
 
+## Configuracion para VM app.run:
+
+app.run(host='0.0.0.0', port=8080)
+
 ## Crear un archivo .env (en la raíz del proyecto) para las variables de entorno:
 
 SECRET_KEY=SECRET_KEY
