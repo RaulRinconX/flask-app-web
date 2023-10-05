@@ -14,10 +14,10 @@ pip install -r requirements.txt
 
 SECRET_KEY=SECRET_KEY
 
-PGSQL_HOST=host
+PGSQL_HOST=10.128.0.10
 
-PGSQL_USER=user
+PGSQL_USER=monitoring_user
 
-PGSQL_PASSWORD=password
+PGSQL_PASSWORD=rasi
 
-PGSQL_DB=database
+PGSQL_DATABASE=monitoring_db
