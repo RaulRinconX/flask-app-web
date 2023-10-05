@@ -1,21 +1,24 @@
 ## Primero, crear un entorno virtual:
 
-python3 -m virtualenv env
-
 pip3 install virtualenv
 
-sudo apt install python3-venv
+python3 -m virtualenv venv
 
 ## Activar el entorno virtual:
 
 ### Linux
+
  . venv/bin/activate
+ 
 ### Windows
+
  .venv\Scripts\activate
 
 ## Para instalar los paquetes necesarios:
 
-pip install -r requirements.txt
+pip install Flask
+pip install python-decouple
+pip install psycopg2-binary
 
 ## Configuracion para VM app.run:
 
