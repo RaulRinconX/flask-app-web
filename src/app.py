@@ -37,4 +37,4 @@ if __name__ == "__main__":
       #ErrorHandlers
       app.register_error_handler(404, page_not_found)
       app.register_error_handler(401, unauthorized)
-      app.run()
+      app.run(host='0.0.0.0', port=8080)

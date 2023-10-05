@@ -4,7 +4,9 @@ class Config:
     SECRET_KEY = config('SECRET_KEY')
 
 class DevelopmentConfig(Config):
-    DEBUG = True 
+    DEBUG = True
+    PORT = 8080
+    HOST = '0.0.0.0' 
 
 config = {
     'development': DevelopmentConfig
