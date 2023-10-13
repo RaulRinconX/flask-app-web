@@ -1,40 +1,56 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, flash
 from config import config 
 from database import db
 import psycopg2.extras
+import re
 from werkzeug.security import generate_password_hash, check_password_hash
 #Routes
 from routes import historias
 
 app = Flask(__name__)
 
-#conn = db.get_db_connection()
+conn = db.get_db_connection()
 
 @app.route("/")
 def index():
      return render_template('index.html')
 
-@app.route("/signup/")
+@app.route("/signup/", methods=['GET', 'POST'])
 def show_signup_form():
-     return render_template("signup_form.html")
+
+     cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+     if request.method == 'POST' and 'name' in request.form and 'lastname' in request.form and 'cedula' in request.form and 'birthdate' in request.form and 'bloodtype' in request.form and 'email' in request.form and 'password' in request.form:
+          name = request.form['name']
+          lastname = request.form['lastname']
+          cedula = request.form['cedula']
+          birthdate = request.form['birthdate']
+          bloodtype = request.form['bloodtype']
+          email = request.form['email']
+          password = request.form['password']
+
+          hashed_password = generate_password_hash(password)
+          
+          cursor.execute('SELECT * FROM paciente WHERE correo_electronico = %s', (email,) )
+          account = cursor.fetchone()
+          print(account)
+          if account:
+               flash("Account already exists! Please log in.")
+          elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
+               flash('Invalid email address')
+          elif not email or not password or not name or not lastname or not cedula or not birthdate or not bloodtype:
+               flash('Please fill out the form')
+          else:
+               cursor.execute("INSERT INTO paciente (nombre, apellido, correo_electronico, identificacion, fecha_nacimiento, grupo_sanguineo, activo, contraseña_hash, contraseña_salt, historia_medica) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (name, lastname, email, cedula, birthdate, bloodtype, True, hashed_password, hashed_password, 1))
+               conn.commit()
+               flash('You have successfully registered')
+     elif request.method == 'POST':
+          flash('Please fill out the form')
+     return render_template("auth/signup.html")
 
 @app.route("/login", methods=['GET', 'POST'])
 def iniciar_sesion():
-     #cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-     if request.method == 'POST':
-          username = request.form['username']
-          password = request.form['password']
-          hashed_password = generate_password_hash(password)
-          #cursor.execute('SELECT * FROM users WHERE username = %s', (username,) )
-          #account = cursor.fetchone()
-          #if account:
-              # print("melo")
-          #else:
-               #cursor.execute("INSERT INTO users (username, password) VALUES (%s,%s)", (username, hashed_password))
-               #conn.commit()
-               #print("no tan melo")
-     else:
-          return render_template('auth/login.html')
+     return render_template('auth/login.html')
 
 @app.route("/health-check/")
 def health():
@@ -59,4 +75,4 @@ if __name__ == "__main__":
       #ErrorHandlers
       app.register_error_handler(404, page_not_found)
       app.register_error_handler(401, unauthorized)
-      app.run(host='0.0.0.0', port=8080)
+      app.run(host='0.0.0.0', port=8080, debug=True)
