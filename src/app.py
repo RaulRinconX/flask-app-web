@@ -9,7 +9,7 @@ from routes import historias
 
 app = Flask(__name__)
 
-#conn = db.get_db_connection()
+conn = db.get_db_connection()
 
 @app.route("/")
 def index():
