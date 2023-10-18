@@ -58,7 +58,7 @@ def health():
 
 @app.route("/historias-clinicas/")
 def consultar_historias():
-     return "hola"
+     return render_template('auth/historias.html')
 
 def page_not_found(error):
      return "<h1> Not found page :( </h1>",404

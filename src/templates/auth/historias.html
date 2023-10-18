@@ -1,0 +1,45 @@
+{% extends './base_template.html' %}
+
+{% block title %}SignUp{% endblock %}
+
+{% block customCSS %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/historias.css') }}">
+{% endblock %}
+
+{% block body %}
+<body>
+    <h1>Tabla de Pacientes</h1>
+    <table class="center" id="patientTable">
+        <tr>
+            <th>ID</th>
+            <th>Nombre del Paciente</th>
+            <th>Identificación</th>
+        </tr>
+    </table>
+
+    <div id="popup" class="popup">
+        <!-- Contenido del popup (como se mostró en respuestas anteriores) -->
+    </div>
+
+    <script>
+        function openPopup(data) {
+        }
+        function loadTableData() {
+            fetch('api/historias') // Reemplaza 'api/historias' con la URL correcta de tu API
+                .then(response => response.json())
+                .then(data => {
+                    const table = document.getElementById('patientTable');
+                    data.forEach(patient => {
+                        const row = table.insertRow(-1);
+                        row.classList.add('popup-trigger');
+                        row.innerHTML = `<td>${patient.id}</td><td>${patient.nombre}</td><td>${patient.cedula}</td>`;
+                        row.addEventListener('click', () => openPopup(patient));
+                    });
+                })
+                .catch(error => console.error('Error al cargar los datos desde la API: ', error));
+        }
+
+        loadTableData(); // Cargar datos al cargar la página
+    </script>
+</body>
+{% endblock %}
