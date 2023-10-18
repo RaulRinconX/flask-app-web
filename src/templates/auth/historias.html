@@ -9,6 +9,81 @@
 {% block body %}
 <body>
   <h1>Historias Clínicas:</h1>
-  <pre>{{ json_data | tojson(indent=4) }}</pre>
+  <table class="center" id="pacientes-table">
+      <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Cédula</th>
+      </tr>
+      {% for paciente in json_data %}
+      <tr class="popup-trigger" data-id="{{ paciente.id }}">
+          <td>{{ paciente.id }}</td>
+          <td>{{ paciente.nombre }}</td>
+          <td>{{ paciente.cedula }}</td>
+      </tr>
+      {% endfor %}
+  </table>
+
+  <div id="popup" class="popup">
+      <div class="popup-content">
+          <span class="popup-close" onclick="closePopup()">&times;</span>
+          <h2>Detalles de la Historia Médica</h2>
+          <table id="detalles-table">
+              <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Cédula</th>
+                  <th>Fecha de Nacimiento</th>
+                  <th>Tipo de Sangre</th>
+                  <th>Fecha del Examen</th>
+                  <th>Enfermedades</th>
+                  <th>Medicamentos</th>
+                  <th>Alergias</th>
+              </tr>
+          </table>
+      </div>
+  </div>
+
+  <script>
+      function openPopup() {
+          var popup = document.getElementById('popup');
+          popup.style.display = 'block';
+      }
+
+      function closePopup() {
+          var popup = document.getElementById('popup');
+          popup.style.display = 'none';
+      }
+
+      var popupTriggers = document.querySelectorAll('.popup-trigger');
+      for (var i = 0; i < popupTriggers.length; i++) {
+          popupTriggers[i].addEventListener('click', function() {
+              openPopup();
+              var patientId = this.getAttribute('data-id');
+              loadPatientDetails(patientId);
+          });
+      }
+
+      function loadPatientDetails(patientId) {
+          // Aquí debes cargar los detalles de la historia médica correspondiente desde el JSON
+          // y mostrarlos en la tabla dentro del popup
+          var detallesTable = document.getElementById('detalles-table');
+          detallesTable.innerHTML = ''; // Limpia la tabla de detalles
+
+          // Recorre el JSON y encuentra el paciente correspondiente por ID
+          var paciente = json_data.find(function(p) {
+              return p.id == patientId;
+          });
+
+          // Crea una fila en la tabla de detalles
+          var row = detallesTable.insertRow();
+          var keys = ['id', 'nombre', 'cedula', 'fecha_nacimiento', 'tipo_sangre', 'fecha_examen', 'enfermedades', 'medicamentos', 'alergias'];
+
+          keys.forEach(function(key) {
+              var cell = row.insertCell();
+              cell.innerHTML = paciente[key];
+          });
+      }
+  </script>
 </body>
 {% endblock %}
