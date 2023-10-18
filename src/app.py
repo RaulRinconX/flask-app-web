@@ -70,7 +70,7 @@ if __name__ == "__main__":
       app.config.from_object(config['development'])
 
       #Blueprints
-      app.register_blueprint(historias.main, url_prefix='api/historias-clinicas/')
+      app.register_blueprint(historias.main, url_prefix='/api/historias-clinicas/')
 
       #ErrorHandlers
       app.register_error_handler(404, page_not_found)
