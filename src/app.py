@@ -3,13 +3,14 @@ from config import config
 from database import db
 import psycopg2.extras
 import re
+import requests
 from werkzeug.security import generate_password_hash, check_password_hash
 #Routes
 from routes import historias
 
 app = Flask(__name__)
 
-conn = db.get_db_connection()
+#conn = db.get_db_connection()
 
 @app.route("/")
 def index():
@@ -58,7 +59,10 @@ def health():
 
 @app.route("/historias-clinicas/")
 def consultar_historias():
-     return render_template('auth/historias.html')
+     url ='http://34.160.204.45:80/api/historias-clinicas'
+     response = requests.get(url)
+     data = response.json()
+     return render_template('auth/historias.html',json_data=data)
 
 def page_not_found(error):
      return "<h1> Not found page :( </h1>",404
