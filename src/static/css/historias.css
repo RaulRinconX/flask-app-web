@@ -1,0 +1,54 @@
+.center {
+    margin: 0 auto;
+}
+
+table {
+    border-collapse: collapse;
+    width: 80%;
+    margin: 20px auto; /* Márgenes horizontal y vertical */
+}
+
+table, th, td {
+    border: 1px solid #ccc;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+tr.popup-trigger:hover {
+    background-color: #f0f0f0; /* Cambio de color al pasar el ratón por encima */
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.popup-content {
+    background-color: #fff;
+    width: 80%;
+    max-width: 600px;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #333;
+    position: relative;
+}
+
+.popup-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.popup-close:hover {
+    color: #f00;
+}
