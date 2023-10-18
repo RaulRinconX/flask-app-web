@@ -8,68 +8,7 @@
 
 {% block body %}
 <body>
-  <h1>Tabla de Pacientes</h1>
-  <table class="center">
-      <tr>
-          <th>ID</th>
-          <th>Nombre del Paciente</th>
-          <th>Identificación</th>
-      </tr>
-  </table>
-
-  <div id="popup" class="popup">
-      <div class="popup-content">
-          <span class="popup-close" onclick="closePopup()">&times;</span>
-          <h2>Detalles de la Historia Médica</h2>
-          <table id="detailTable">
-              <tr>
-                  <th>ID</th>
-                  <th>Nombre</th>
-                  <th>Cédula</th>
-                  <th>Fecha de Nacimiento</th>
-                  <th>Tipo de Sangre</th>
-                  <th>Fecha del Examen</th>
-                  <th>Enfermedades</th>
-                  <th>Medicamentos</th>
-                  <th>Alergias</th>
-              </tr>
-              <!-- Aquí se mostrarán los detalles de la historia médica cuando se hace clic en una fila de la tabla -->
-          </table>
-      </div>
-  </div>
-
-  <script>
-      function openPopup(data) {
-          var popup = document.getElementById('popup');
-          var detailTable = document.getElementById('detailTable');
-          detailTable.innerHTML = ''; // Limpiamos la tabla antes de agregar los nuevos detalles
-
-          // Llenar la tabla de detalles con los datos del paciente
-          var row = detailTable.insertRow(0);
-          for (var key in data) {
-              var cell = row.insertCell();
-              cell.innerHTML = data[key];
-          }
-
-          popup.style.display = 'block';
-      }
-
-      function closePopup() {
-          var popup = document.getElementById('popup');
-          popup.style.display = 'none';
-      }
-
-      // Acceder a los datos pasados desde app.py
-      var table = document.querySelector('.center table');
-      var popupTriggers = document.querySelectorAll('.popup-trigger');
-      json_data.forEach(function(data, index) {
-          var row = table.insertRow(index + 1);
-          row.classList.add('popup-trigger');
-          row.innerHTML = `<td>${data.id}</td><td>${data.nombre}</td><td>${data.cedula}</td>`;
-          row.addEventListener('click', function() {
-              openPopup(data);
-          });
-      });
-  </script>
+  <h1>Historias Clínicas:</h1>
+  <pre>{{ json_data | tojson(indent=4) }}</pre>
 </body>
 {% endblock %}
