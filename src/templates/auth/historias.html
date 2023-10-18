@@ -8,66 +8,29 @@
 
 {% block body %}
 <body>
-    <h1>Tabla de Pacientes</h1>
-    <table class="center">
+    <table class="centered" id="patient-table">
+      <thead>
         <tr>
-            <th>ID</th>
-            <th>Nombre del Paciente</th>
-            <th>Identificación</th>
+          <th>ID</th>
+          <th>Nombre del Paciente</th>
+          <th>Identificación</th>
         </tr>
-        <tr class="popup-trigger">
-            <td>1</td>
-            <td>Nombre del Paciente 1</td>
-            <td>123456789</td>
-        </tr>
-        <tr class="popup-trigger">
-            <td>2</td>
-            <td>Nombre del Paciente 2</td>
-            <td>987654321</td>
-        </tr>
-        <!-- Agrega más filas según sea necesario -->
+      </thead>
+      <tbody>
+        <!-- Las filas de la tabla se generarán dinámicamente aquí -->
+      </tbody>
     </table>
-
-    <div id="popup" class="popup">
-        <div class="popup-content">
-            <span class="popup-close" onclick="closePopup()">&times;</span>
-            <h2>Detalles de la Historia Médica</h2>
-            <table>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Cédula</th>
-                    <th>Fecha de Nacimiento</th>
-                    <th>Tipo de Sangre</th>
-                    <th>Fecha del Examen</th>
-                    <th>Enfermedades</th>
-                    <th>Medicamentos</th>
-                    <th>Alergias</th>
-                </tr>
-                <!-- Aquí se mostrarán los detalles de la historia médica cuando se hace clic en una fila de la tabla -->
-            </table>
-        </div>
+  
+    <div class="popup" id="popup">
+      <div class="popup-content">
+        <span class="close-popup" id="close-popup">&times;</span>
+        <h2>Historia Clínica</h2>
+        <ul id="popup-details">
+          <!-- Los detalles de la historia clínica se cargarán dinámicamente aquí -->
+        </ul>
+      </div>
     </div>
-
-    <script>
-        function openPopup() {
-            var popup = document.getElementById('popup');
-            popup.style.display = 'block';
-        }
-
-        function closePopup() {
-            var popup = document.getElementById('popup');
-            popup.style.display = 'none';
-        }
-
-        var popupTriggers = document.querySelectorAll('.popup-trigger');
-        for (var i = 0; i < popupTriggers.length; i++) {
-            popupTriggers[i].addEventListener('click', function() {
-                openPopup();
-                // Aquí debes cargar los detalles de la historia médica correspondiente a la fila en la que se hizo clic
-                // Puedes usar JavaScript para hacer esto y mostrar los datos en la tabla dentro del popup
-            });
-        }
-    </script>
-</body>
+  
+    <script src="historias-clinicas-script.js"></script>
+  </body>
 {% endblock %}

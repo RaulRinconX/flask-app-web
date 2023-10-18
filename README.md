@@ -12,7 +12,7 @@ python3 -m virtualenv venv
  
 ### Windows
 
- .venv\Scripts\activate
+ . venv\Scripts\activate
 
 ## Para instalar los paquetes necesarios:
 
