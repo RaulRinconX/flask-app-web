@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   
     // Hacer una solicitud GET a la API
-    fetch("http://34.160.204.45/api/historias/")
+    fetch("http://34.160.204.45/historias/")
       .then(response => response.json())
       .then(data => {
         const table = document.getElementById("patient-table").getElementsByTagName('tbody')[0];

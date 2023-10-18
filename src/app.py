@@ -9,7 +9,7 @@ from routes import historias
 
 app = Flask(__name__)
 
-#conn = db.get_db_connection()
+conn = db.get_db_connection()
 
 @app.route("/")
 def index():
@@ -70,7 +70,7 @@ if __name__ == "__main__":
       app.config.from_object(config['development'])
 
       #Blueprints
-      app.register_blueprint(historias.main, url_prefix='/api/historias')
+      app.register_blueprint(historias.main, url_prefix='/historias-clinicas')
 
       #ErrorHandlers
       app.register_error_handler(404, page_not_found)
