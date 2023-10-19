@@ -45,48 +45,36 @@
   </div>
 
   <script>
-      function openPopup() {
-          var popup = document.getElementById('popup');
-          popup.style.display = 'block';
-      }
+    function openPopup() {
+        var popup = document.getElementById('popup');
+        popup.style.display = 'block';
+    }
 
-      function closePopup() {
-          var popup = document.getElementById('popup');
-          popup.style.display = 'none';
-      }
+    function closePopup() {
+        var popup = document.getElementById('popup');
+        popup.style.display = 'none';
+    }
 
-      var popupTriggers = document.querySelectorAll('.popup-trigger');
-      for (var i = 0; i < popupTriggers.length; i++) {
-          popupTriggers[i].addEventListener('click', function() {
-              openPopup();
-              var patientId = this.getAttribute('data-id');
-              loadPatientDetails(patientId);
-          });
-      }
+    function loadPatientDetails(patientId) {
+        // Obtiene los datos del paciente del objeto JSON
+        var patient = json_data[patientId];
+        if (patient) {
+            var table = document.getElementById('detalles-table');
+            // Llena la tabla con los detalles del paciente
+            // Aquí debes crear las filas y celdas de la tabla según la estructura de los datos en json_data.
+        }
+    }
 
-      function loadPatientDetails(patientId) {
-    // Aquí debes cargar los detalles de la historia médica correspondiente desde el JSON
-    // y mostrarlos en la tabla dentro del popup
-    var detallesTable = document.getElementById('detalles-table');
-    detallesTable.innerHTML = ''; // Limpia la tabla de detalles
-
-    // Recorre el JSON y encuentra el paciente correspondiente por ID
-    var paciente = json_data.find(function(p) {
-        return p.id == patientId;
+    document.addEventListener('DOMContentLoaded', function() {
+        var popupTriggers = document.querySelectorAll('.popup-trigger');
+        for (var i = 0; i < popupTriggers.length; i++) {
+            popupTriggers[i].addEventListener('click', function() {
+                openPopup();
+                var patientId = this.getAttribute('data-id');
+                loadPatientDetails(patientId);
+            });
+        }
     });
-
-    console.log("Paciente:", paciente); // Agrega esta línea para depurar
-
-    // Crea una fila en la tabla de detalles
-    var row = detallesTable.insertRow();
-    var keys = ['id', 'nombre', 'cedula', 'fecha_nacimiento', 'tipo_sangre', 'fecha_examen', 'enfermedades', 'medicamentos', 'alergias'];
-
-    keys.forEach(function(key) {
-        var cell = row.insertCell();
-        cell.innerHTML = paciente[key];
-        console.log(key + ": " + paciente[key]); // Agrega esta línea para depurar
-    });
-}
   </script>
 </body>
 {% endblock %}
