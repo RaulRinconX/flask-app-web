@@ -15,6 +15,7 @@
           <th>ID</th>
           <th>Nombre</th>
           <th>Cédula</th>
+          <th>Tipo de Sangre</th>
           <th>Fecha de Nacimiento</th>
           <th>Tipo de Sangre</th>
           <th>Fecha del Examen</th>
@@ -27,13 +28,11 @@
           <td>{{ paciente.id }}</td>
           <td>{{ paciente.nombre }}</td>
           <td>{{ paciente.cedula }}</td>
-          <td>{{ paciente.fecha_nacimiento }}</td>
           <td>{{ tipo_sangre }}</td>
           <td>{{ fecha_examen }}</td>
           <td>{{ enfermedades }}</td>
           <td>{{ medicamentos }}</td>
           <td>{{ alergia }}</td>
-
       </tr>
       {% endfor %}
   </table>
