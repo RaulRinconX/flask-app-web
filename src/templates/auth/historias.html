@@ -64,14 +64,21 @@
         // Limpia la tabla antes de llenarla con nuevos detalles
         table.innerHTML = "";
 
-        // Crea una fila para cada atributo del paciente
+        // Obtén la primera fila (encabezados) de la tabla
+        var headerRow = table.insertRow();
         for (var key in patient) {
             if (patient.hasOwnProperty(key)) {
-                var row = table.insertRow();
-                var keyCell = row.insertCell(0);
-                var valueCell = row.insertCell(1);
+                var headerCell = document.createElement("th");
+                headerCell.textContent = key;
+                headerRow.appendChild(headerCell);
+            }
+        }
 
-                keyCell.textContent = key;
+        // Crea una fila para los valores del paciente
+        var valueRow = table.insertRow();
+        for (var key in patient) {
+            if (patient.hasOwnProperty(key)) {
+                var valueCell = valueRow.insertCell();
                 valueCell.textContent = patient[key];
             }
         }
