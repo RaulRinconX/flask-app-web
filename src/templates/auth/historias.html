@@ -55,7 +55,7 @@
         popup.style.display = 'none';
     }
 
-    function loadPatientDetails(patientId) {
+    function loadPatientDetails(patientId,json_data) {
     // Obtiene los datos del paciente del objeto JSON
     var patient = json_data[patientId];
     if (patient) {
@@ -91,7 +91,7 @@
             popupTriggers[i].addEventListener('click', function() {
                 openPopup();
                 var patientId = this.getAttribute('data-id');
-                loadPatientDetails(patientId);
+                loadPatientDetails(patientId,json_data);
             });
         }
     });
