@@ -10,7 +10,7 @@ rabbit_host = '10.128.0.13'
 rabbit_user = 'monitoring_user'
 rabbit_password = 'rasi'
 exchange = 'monitoring_citas'
-topics = ['citas.#']
+topics = 'cita'
 
 connection = pika.BlockingConnection(
     pika.ConnectionParameters(host=rabbit_host, credentials=pika.PlainCredentials(rabbit_user, rabbit_password)))
@@ -36,9 +36,10 @@ def callback(ch, method, properties, body):
         payload = json.loads(body)
         topic = method.routing_key.split('.')
         emit('cita', payload)  # Emitir el payload JSON a los clientes conectados
-        print('hola')
+        print("Measurement :%r" % (str(payload)))
     except json.JSONDecodeError:
         print("Error al decodificar el mensaje JSON:", body)
+        
 
 channel.basic_consume(
     queue=queue_name, on_message_callback=callback, auto_ack=True)
