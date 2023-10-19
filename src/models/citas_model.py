@@ -32,10 +32,10 @@ class citasModel():
 
             with connection.cursor() as cursor:
                 # Obtener la fecha de hoy en el formato "dd/mm/yyyy"
-                fecha_hoy = datetime.now().strftime("%d/%m/%Y")
+                fecha_hoy = datetime.now().strftime("'%d/%m/%Y %H:%M:%S'")
 
                 # Modificar la consulta SQL para filtrar las citas de hoy
-                sql = "SELECT * FROM CITA WHERE DATE_FORMAT(fecha, '%d/%m/%Y') = %s"
+                sql = "SELECT * FROM CITA WHERE DATE_FORMAT(fecha, ''%d/%m/%Y %H:%M:%S'') = %s"
                 cursor.execute(sql, (fecha_hoy,))
                 resultset = cursor.fetchall()
 
