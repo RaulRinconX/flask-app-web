@@ -4,7 +4,6 @@
 
 {% block customCSS %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/historias.css') }}">
-
 {% endblock %}
 
 {% block body %}
@@ -17,7 +16,6 @@
           <th>Cédula</th>
           <th>Tipo de Sangre</th>
           <th>Fecha de Nacimiento</th>
-          <th>Tipo de Sangre</th>
           <th>Fecha del Examen</th>
           <th>Enfermedades</th>
           <th>Medicamentos</th>
@@ -28,13 +26,18 @@
           <td>{{ paciente.id }}</td>
           <td>{{ paciente.nombre }}</td>
           <td>{{ paciente.cedula }}</td>
-          <td>{{ tipo_sangre }}</td>
-          <td>{{ fecha_examen }}</td>
-          <td>{{ enfermedades }}</td>
-          <td>{{ medicamentos }}</td>
-          <td>{{ alergia }}</td>
+          <td>{{ paciente.tipo_sangre }}</td>
+          <td>{{ paciente.fecha_nacimiento }}</td>
+          <td>{{ paciente.fecha_examen }}</td>
+          <td>{{ paciente.enfermedades }}</td>
+          <td>{{ paciente.medicamentos }}</td>
+          <td>{{ paciente.alergia }}</td>
       </tr>
       {% endfor %}
   </table>
 </body>
 {% endblock %}
+
+
+
+
