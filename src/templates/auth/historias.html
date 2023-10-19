@@ -65,25 +65,28 @@
       }
 
       function loadPatientDetails(patientId) {
-          // Aquí debes cargar los detalles de la historia médica correspondiente desde el JSON
-          // y mostrarlos en la tabla dentro del popup
-          var detallesTable = document.getElementById('detalles-table');
-          detallesTable.innerHTML = ''; // Limpia la tabla de detalles
+    // Aquí debes cargar los detalles de la historia médica correspondiente desde el JSON
+    // y mostrarlos en la tabla dentro del popup
+    var detallesTable = document.getElementById('detalles-table');
+    detallesTable.innerHTML = ''; // Limpia la tabla de detalles
 
-          // Recorre el JSON y encuentra el paciente correspondiente por ID
-          var paciente = json_data.find(function(p) {
-              return p.id == patientId;
-          });
+    // Recorre el JSON y encuentra el paciente correspondiente por ID
+    var paciente = json_data.find(function(p) {
+        return p.id == patientId;
+    });
 
-          // Crea una fila en la tabla de detalles
-          var row = detallesTable.insertRow();
-          var keys = ['id', 'nombre', 'cedula', 'fecha_nacimiento', 'tipo_sangre', 'fecha_examen', 'enfermedades', 'medicamentos', 'alergias'];
+    console.log("Paciente:", paciente); // Agrega esta línea para depurar
 
-          keys.forEach(function(key) {
-              var cell = row.insertCell();
-              cell.innerHTML = paciente[key];
-          });
-      }
+    // Crea una fila en la tabla de detalles
+    var row = detallesTable.insertRow();
+    var keys = ['id', 'nombre', 'cedula', 'fecha_nacimiento', 'tipo_sangre', 'fecha_examen', 'enfermedades', 'medicamentos', 'alergias'];
+
+    keys.forEach(function(key) {
+        var cell = row.insertCell();
+        cell.innerHTML = paciente[key];
+        console.log(key + ": " + paciente[key]); // Agrega esta línea para depurar
+    });
+}
   </script>
 </body>
 {% endblock %}
