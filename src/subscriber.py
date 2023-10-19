@@ -36,6 +36,7 @@ def callback(ch, method, properties, body):
         payload = json.loads(body)
         topic = method.routing_key.split('.')
         emit('cita', payload)  # Emitir el payload JSON a los clientes conectados
+        print('hola')
     except json.JSONDecodeError:
         print("Error al decodificar el mensaje JSON:", body)
 
