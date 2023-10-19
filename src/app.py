@@ -7,6 +7,7 @@ import requests
 from werkzeug.security import generate_password_hash, check_password_hash
 #Routes
 from routes import historias
+from routes import citas
 
 app = Flask(__name__)
 
@@ -75,6 +76,7 @@ if __name__ == "__main__":
 
       #Blueprints
       app.register_blueprint(historias.main, url_prefix='/api/historias-clinicas/')
+      app.register_blueprint(citas.main, url_prefix='/api/citas/')
 
       #ErrorHandlers
       app.register_error_handler(404, page_not_found)
