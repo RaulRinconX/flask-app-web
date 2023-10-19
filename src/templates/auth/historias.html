@@ -56,9 +56,8 @@
         popup.style.display = 'none';
     }
 
-    function loadPatientDetails(patientId) {
-      console.log(json_data)
-        var patient = json_data[patientId];
+    function loadPatientDetails(patientId,a_data_data) {
+        var patient = a_data_data[patientId];
         if (patient) {
             var table = document.getElementById('detalles-table');
             
@@ -85,14 +84,14 @@
             }
         }
     }
-
+    const a_data_data = json_data
     document.addEventListener('DOMContentLoaded', function() {
         var popupTriggers = document.querySelectorAll('.popup-trigger');
         for (var i = 0; i < popupTriggers.length; i++) {
             popupTriggers[i].addEventListener('click', function() {
                 openPopup();
                 var patientId = this.getAttribute('data-id');
-                loadPatientDetails(patientId);
+                loadPatientDetails(patientId,a_data_data);
             });
         }
     });
