@@ -4,7 +4,7 @@ from .entities.Citas import Citas
 class citasModel():
 
     @classmethod
-    def get_historias(self):
+    def get_citas(self):
         try:
             connection=get_db_connection()
             citas=[]
