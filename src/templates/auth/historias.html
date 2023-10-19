@@ -15,87 +15,27 @@
           <th>ID</th>
           <th>Nombre</th>
           <th>Cédula</th>
+          <th>Fecha de Nacimiento</th>
+          <th>Tipo de Sangre</th>
+          <th>Fecha del Examen</th>
+          <th>Enfermedades</th>
+          <th>Medicamentos</th>
+          <th>Alergias</th>
       </tr>
       {% for paciente in json_data %}
       <tr class="popup-trigger" data-id="{{ paciente.id }}">
           <td>{{ paciente.id }}</td>
           <td>{{ paciente.nombre }}</td>
           <td>{{ paciente.cedula }}</td>
+          <td>{{ paciente.fecha_nacimiento }}</td>
+          <td>{{ tipo_sangre }}</td>
+          <td>{{ fecha_examen }}</td>
+          <td>{{ enfermedades }}</td>
+          <td>{{ medicamentos }}</td>
+          <td>{{ alergia }}</td>
+
       </tr>
       {% endfor %}
   </table>
-
-  <div id="popup" class="popup">
-      <div class="popup-content">
-          <span class="popup-close" onclick="closePopup()">&times;</span>
-          <h2>Detalles de la Historia Médica</h2>
-          <table id="detalles-table">
-              <tr>
-                  <th>ID</th>
-                  <th>Nombre</th>
-                  <th>Cédula</th>
-                  <th>Fecha de Nacimiento</th>
-                  <th>Tipo de Sangre</th>
-                  <th>Fecha del Examen</th>
-                  <th>Enfermedades</th>
-                  <th>Medicamentos</th>
-                  <th>Alergias</th>
-              </tr>
-          </table>
-      </div>
-  </div>
-
-  <script>
-    
-    function openPopup() {
-        var popup = document.getElementById('popup');
-        popup.style.display = 'block';
-    }
-
-    function closePopup() {
-        var popup = document.getElementById('popup');
-        popup.style.display = 'none';
-    }
-
-    function loadPatientDetails(patientId) {
-        var patient = json_data[patientId];
-        if (patient) {
-            var table = document.getElementById('detalles-table');
-            
-            // Limpia la tabla antes de llenarla con nuevos detalles
-            table.innerHTML = "";
-
-            // Obtén la primera fila (encabezados) de la tabla
-            var headerRow = table.insertRow();
-            for (var key in patient) {
-                if (patient.hasOwnProperty(key)) {
-                    var headerCell = document.createElement("th");
-                    headerCell.textContent = key;
-                    headerRow.appendChild(headerCell);
-                }
-            }
-
-            // Crea una fila para los valores del paciente
-            var valueRow = table.insertRow();
-            for (var key in patient) {
-                if (patient.hasOwnProperty(key)) {
-                    var valueCell = valueRow.insertCell();
-                    valueCell.textContent = patient[key];
-                }
-            }
-        }
-    }
-    
-    document.addEventListener('DOMContentLoaded', function() {
-        var popupTriggers = document.querySelectorAll('.popup-trigger');
-        for (var i = 0; i < popupTriggers.length; i++) {
-            popupTriggers[i].addEventListener('click', function() {
-                openPopup();
-                var patientId = this.getAttribute('data-id');
-                loadPatientDetails(patientId);
-            });
-        }
-    });
-  </script>
 </body>
 {% endblock %}
