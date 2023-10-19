@@ -77,6 +77,7 @@ if __name__ == "__main__":
       #Blueprints
       app.register_blueprint(historias.main, url_prefix='/api/historias-clinicas/')
       app.register_blueprint(citas.main, url_prefix='/api/citas/')
+      app.register_blueprint(citas.citas_hoy, url_prefix='/api/citas-actual')
 
       #ErrorHandlers
       app.register_error_handler(404, page_not_found)

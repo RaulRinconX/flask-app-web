@@ -10,3 +10,12 @@ def get_citas():
         return jsonify(citas)
     except Exception as e:
         return jsonify({'message': str(e)}),500
+
+citas_hoy = Blueprint('citas_hoy_blueprint', __name__)
+@citas_hoy.route('/')
+def get_citas_fecha_actual():
+    try:
+        citas = citasModel.get_citas_fecha_actual()
+        return jsonify(citas)
+    except Exception as e:
+        return jsonify({'message': str(e)}),500

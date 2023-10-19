@@ -10,3 +10,4 @@ def get_historias():
         return jsonify(historias)
     except Exception as e:
         return jsonify({'message': str(e)}),500
+    

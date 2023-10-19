@@ -1,5 +1,6 @@
 from database.db import get_db_connection
 from .entities.Citas import Citas
+from datetime import datetime
 
 class citasModel():
 
@@ -22,3 +23,32 @@ class citasModel():
         
         except Exception as e:
             raise Exception(e)
+    
+    @classmethod
+    def get_citas_fecha_actual(self):
+        try:
+            connection = get_db_connection()
+            citas = []
+
+            with connection.cursor() as cursor:
+                # Obtener la fecha de hoy en el formato "dd/mm/yyyy"
+                fecha_hoy = datetime.now().strftime("%d/%m/%Y")
+
+                # Modificar la consulta SQL para filtrar las citas de hoy
+                sql = "SELECT * FROM CITA WHERE DATE_FORMAT(fecha, '%d/%m/%Y') = %s"
+                cursor.execute(sql, (fecha_hoy,))
+                resultset = cursor.fetchall()
+
+                for row in resultset:
+                    cita = Citas(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7])
+                    citas.append(cita.to_JSON())
+
+            connection.close()
+            return citas
+        except Exception as e:
+            raise Exception(e)
+
+
+
+
+
