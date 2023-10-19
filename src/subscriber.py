@@ -3,9 +3,6 @@ from flask_socketio import SocketIO, emit
 import pika
 import json
 
-app = Flask(__name__)
-socketio = SocketIO(app)
-
 rabbit_host = '10.128.0.13'
 rabbit_user = 'monitoring_user'
 rabbit_password = 'rasi'
@@ -45,6 +42,3 @@ channel.basic_consume(
     queue=queue_name, on_message_callback=callback, auto_ack=True)
 
 channel.start_consuming()
-
-if __name__ == '__main__':
-    socketio.run(app, debug=True)
