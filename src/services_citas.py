@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_mail import Mail, Message
 
-app = Flask(__name)
+app = Flask(__name__)
 
 # Configuración de Flask-Mail
 app.EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
