@@ -24,7 +24,6 @@ for topic in topics:
 
 print('> Waiting citas. To exit, press CTRL+C')
 
-@socketio.on('connect')
 def handle_connect():
     print("Client connected")
 
