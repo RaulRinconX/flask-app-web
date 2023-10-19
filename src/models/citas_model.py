@@ -10,7 +10,7 @@ class citasModel():
             citas=[]
 
             with connection.cursor() as cursor:
-                cursor.execute("SELECT * FROM CITAS")
+                cursor.execute("SELECT * FROM CITA")
                 resultset=cursor.fetchall()
 
                 for row in resultset:
