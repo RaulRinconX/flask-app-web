@@ -32,7 +32,7 @@ def show_signup_form():
 
           hashed_password = generate_password_hash(password)
           
-          cursor.execute('SELECT * FROM paciente WHERE correo_electronico = %s', (email,) )
+          cursor.execute('SELECT * FROM paciente WHERE correo_electronico = %s', (email) )
           account = cursor.fetchone()
           print(account)
           if account:
