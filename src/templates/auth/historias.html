@@ -56,14 +56,27 @@
     }
 
     function loadPatientDetails(patientId) {
-        // Obtiene los datos del paciente del objeto JSON
-        var patient = json_data[patientId];
-        if (patient) {
-            var table = document.getElementById('detalles-table');
-            // Llena la tabla con los detalles del paciente
-            // Aquí debes crear las filas y celdas de la tabla según la estructura de los datos en json_data.
+    // Obtiene los datos del paciente del objeto JSON
+    var patient = json_data[patientId];
+    if (patient) {
+        var table = document.getElementById('detalles-table');
+        
+        // Limpia la tabla antes de llenarla con nuevos detalles
+        table.innerHTML = "";
+
+        // Crea una fila para cada atributo del paciente
+        for (var key in patient) {
+            if (patient.hasOwnProperty(key)) {
+                var row = table.insertRow();
+                var keyCell = row.insertCell(0);
+                var valueCell = row.insertCell(1);
+
+                keyCell.textContent = key;
+                valueCell.textContent = patient[key];
+            }
         }
     }
+}
 
     document.addEventListener('DOMContentLoaded', function() {
         var popupTriggers = document.querySelectorAll('.popup-trigger');
