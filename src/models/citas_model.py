@@ -1,6 +1,7 @@
 from database.db import get_db_connection
 from .entities.Citas import Citas
 from datetime import datetime
+import pytz
 
 class citasModel():
 
@@ -31,9 +32,10 @@ class citasModel():
             citas = []
 
             with connection.cursor() as cursor:
-                # Obtener la fecha de hoy en el formato "dd/mm/yyyy"
-                fecha_hoy = datetime.now()
-                sql = "SELECT * FROM CITA WHERE DATE_TRUNC('day', fecha) = '%s'"
+                
+                colombian_timezone = pytz.timezone('America/Bogota')
+                fecha_hoy = datetime.now(colombian_timezone)
+                sql = "SELECT * FROM CITA WHERE DATE_TRUNC('day', fecha) = %s"
                 # Modificar la consulta SQL para filtrar las citas de hoy
                 cursor.execute(sql, (fecha_hoy.date(),))
                 resultset = cursor.fetchall()
