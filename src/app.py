@@ -66,7 +66,7 @@ def health():
 
 @app.route("/historias-clinicas/", methods=["GET","POST"])
 def agregar_historia_clinica():
-     if request.method == 'POST':
+     if request.method == 'POST' and 'nombre' in request.form and 'cedula' in request.form and 'fecha_nacimiento' in request.form and 'tipo_sangre' in request.form and 'fecha_examen' in request.form and 'enfermedades' in request.form and 'medicamentos' in request.form and 'alergia' in request.form:
           # Obtener datos del formulario
           nombre = request.form['nombre']
           cedula = request.form['cedula']
