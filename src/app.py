@@ -6,7 +6,7 @@ import re
 import requests
 import base64
 from werkzeug.security import generate_password_hash, check_password_hash
-from cryptography.fernet import Fernet
+from cryptography.fernet import Fernet, InvalidToken
 
 #Routes
 from routes import historias
@@ -97,9 +97,29 @@ def agregar_historia_clinica():
           return redirect(url_for('agregar_historia_clinica'))
      url ='http://34.160.204.45:80/api/historias-clinicas'
      response = requests.get(url)
-     data = response.json()
-     return render_template('auth/historias.html',json_data=data)
+     historias_cifradas = response.json()
+     # Desencriptar los datos
+     historias = []
+     for historia_cifrada in historias_cifradas:
+          try:
+               historia = {
+                    'nombre': fernet.decrypt(base64.urlsafe_b64decode(historia_cifrada['nombre'])).decode('utf-8'),
+                    'cedula': fernet.decrypt(base64.urlsafe_b64decode(historia_cifrada['cedula'])).decode('utf-8'),
+                    'fecha_nacimiento': historia_cifrada['fecha_nacimiento'],  # Suponiendo que esta no está cifrada
+                    'tipo_sangre': fernet.decrypt(base64.urlsafe_b64decode(historia_cifrada['tipo_sangre'])).decode('utf-8'),
+                    'fecha_examen': historia_cifrada['fecha_examen'],  # Suponiendo que esta no está cifrada
+                    'enfermedades': fernet.decrypt(base64.urlsafe_b64decode(historia_cifrada['enfermedades'])).decode('utf-8'),
+                    'medicamentos': fernet.decrypt(base64.urlsafe_b64decode(historia_cifrada['medicamentos'])).decode('utf-8'),
+                    'alergia': fernet.decrypt(base64.urlsafe_b64decode(historia_cifrada['alergia'])).decode('utf-8')
+               }
+               historias.append(historia)
+          except (InvalidToken, TypeError, base64.binascii.Error):
+               # Manejar el error si la desencriptación falla
+               # Esto puede suceder si el token es inválido o si los datos no están correctamente codificados en base64
+               pass
 
+     # Renderizar la plantilla con los datos desencriptados
+     return render_template('auth/historias.html', json_data=historias)
 def page_not_found(error):
      return "<h1> Not found page :( </h1>",404
 
