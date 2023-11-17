@@ -4,6 +4,7 @@ from database import db
 import psycopg2.extras
 import re
 import requests
+import base64
 from werkzeug.security import generate_password_hash, check_password_hash
 from cryptography.fernet import Fernet
 
@@ -77,14 +78,14 @@ def agregar_historia_clinica():
           alergia = request.form['alergia']
 
           # Encriptar los datos
-          nombre_cifrado = fernet.encrypt(nombre.encode())
-          cedula_cifrada = fernet.encrypt(cedula.encode())
-          fecha_nacimiento_cifrada = fernet.encrypt(fecha_nacimiento.encode())
-          tipo_sangre_cifrado = fernet.encrypt(tipo_sangre.encode())
-          fecha_examen_cifrada = fernet.encrypt(fecha_examen.encode())
-          enfermedades_cifradas = fernet.encrypt(enfermedades.encode())
-          medicamentos_cifrados = fernet.encrypt(medicamentos.encode())
-          alergia_cifrada = fernet.encrypt(alergia.encode())
+          nombre_cifrado = base64.urlsafe_b64encode(fernet.encrypt(nombre.encode())).decode('utf-8')
+          cedula_cifrada = base64.urlsafe_b64encode(fernet.encrypt(cedula.encode())).decode('utf-8')
+          fecha_nacimiento_cifrada = fecha_nacimiento
+          tipo_sangre_cifrado = base64.urlsafe_b64encode(fernet.encrypt(tipo_sangre.encode())).decode('utf-8')
+          fecha_examen_cifrada = fecha_examen
+          enfermedades_cifradas = base64.urlsafe_b64encode(fernet.encrypt(enfermedades.encode())).decode('utf-8')
+          medicamentos_cifrados = base64.urlsafe_b64encode(fernet.encrypt(medicamentos.encode())).decode('utf-8')
+          alergia_cifrada = base64.urlsafe_b64encode(fernet.encrypt(alergia.encode())).decode('utf-8')
 
           # Insertar en la base de datos
           conn = db.get_db_connection()
