@@ -18,6 +18,7 @@ python3 -m virtualenv venv
 
 pip install -r requirements.txt
 pip install cryptography
+sudo apt-get install build-essential libssl-dev libffi-dev python3-dev
 
 ## Configuracion para VM app.run:
 

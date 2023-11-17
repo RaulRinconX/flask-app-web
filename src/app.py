@@ -60,7 +60,7 @@ def iniciar_sesion():
 def health():
     return "OK!"
 
-@app.route("/historias-clinicas/", methods=["POST"])
+@app.route("/historias-clinicas/", methods=["GET","POST"])
 def agregar_historia_clinica():
      if request.method == 'POST':
           # Obtener datos del formulario
