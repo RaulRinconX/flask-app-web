@@ -5,6 +5,8 @@ import psycopg2.extras
 import re
 import requests
 from werkzeug.security import generate_password_hash, check_password_hash
+from cryptography.fernet import Fernet
+
 #Routes
 from routes import historias
 from routes import citas
@@ -58,8 +60,36 @@ def iniciar_sesion():
 def health():
     return "OK!"
 
-@app.route("/historias-clinicas/")
-def consultar_historias():
+@app.route("/historias-clinicas/", methods=["POST"])
+def agregar_historia_clinica():
+     if request.method == 'POST':
+          # Obtener datos del formulario
+          nombre = request.form['nombre']
+          cedula = request.form['cedula']
+          fecha_nacimiento = request.form['fecha_nacimiento']
+          tipo_sangre = request.form['tipo_sangre']
+          fecha_examen = request.form['fecha_examen']
+          enfermedades = request.form['enfermedades']
+          medicamentos = request.form['medicamentos']
+          alergia = request.form['alergia']
+
+          # Encriptar los datos
+          nombre_cifrado = fernet.encrypt(nombre.encode())
+          cedula_cifrada = fernet.encrypt(cedula.encode())
+          fecha_nacimiento_cifrada = fernet.encrypt(fecha_nacimiento.encode())
+          tipo_sangre_cifrado = fernet.encrypt(tipo_sangre.encode())
+          fecha_examen_cifrada = fernet.encrypt(fecha_examen.encode())
+          enfermedades_cifradas = fernet.encrypt(enfermedades.encode())
+          medicamentos_cifrados = fernet.encrypt(medicamentos.encode())
+          alergia_cifrada = fernet.encrypt(alergia.encode())
+
+          # Insertar en la base de datos
+          conn = db.get_db_connection()
+          cur = conn.cursor()
+          cur.execute('INSERT INTO historias_clinicas (nombre, cedula, fecha_nacimiento, tipo_sangre, fecha_examen, enfermedades, medicamentos, alergia) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+                         (nombre_cifrado, cedula_cifrada, fecha_nacimiento_cifrada, tipo_sangre_cifrado, fecha_examen_cifrada, enfermedades_cifradas, medicamentos_cifrados, alergia_cifrada))
+          conn.commit()
+          conn.close()
      url ='http://34.160.204.45:80/api/historias-clinicas'
      response = requests.get(url)
      data = response.json()
@@ -77,7 +107,6 @@ if __name__ == "__main__":
       #Blueprints
       app.register_blueprint(historias.main, url_prefix='/api/historias-clinicas/')
       app.register_blueprint(citas.main, url_prefix='/api/citas/')
-      app.register_blueprint(citas.citas_hoy, url_prefix='/api/citas-actual')
 
       #ErrorHandlers
       app.register_error_handler(404, page_not_found)

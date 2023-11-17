@@ -17,6 +17,7 @@ python3 -m virtualenv venv
 ## Para instalar los paquetes necesarios:
 
 pip install -r requirements.txt
+pip install cryptography
 
 ## Configuracion para VM app.run:
 
