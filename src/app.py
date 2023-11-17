@@ -89,7 +89,7 @@ def agregar_historia_clinica():
           # Insertar en la base de datos
           conn = db.get_db_connection()
           cur = conn.cursor()
-          cur.execute('INSERT INTO historias_clinicas (nombre, cedula, fecha_nacimiento, tipo_sangre, fecha_examen, enfermedades, medicamentos, alergia) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+          cur.execute('INSERT INTO historias_clinicas (nombre, cedula, fecha_nacimiento, tipo_sangre, fecha_examen, enfermedades, medicamentos, alergia) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)',
                          (nombre_cifrado, cedula_cifrada, fecha_nacimiento_cifrada, tipo_sangre_cifrado, fecha_examen_cifrada, enfermedades_cifradas, medicamentos_cifrados, alergia_cifrada))
           conn.commit()
           conn.close()
