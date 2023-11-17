@@ -79,7 +79,7 @@ def agregar_historia_clinica():
 
           # Encriptar los datos
           nombre_cifrado = base64.urlsafe_b64encode(fernet.encrypt(nombre.encode())).decode('utf-8')
-          cedula_cifrada = base64.urlsafe_b64encode(fernet.encrypt(cedula.encode())).decode('utf-8')
+          cedula_cifrada = int(cedula)
           fecha_nacimiento_cifrada = fecha_nacimiento
           tipo_sangre_cifrado = base64.urlsafe_b64encode(fernet.encrypt(tipo_sangre.encode())).decode('utf-8')
           fecha_examen_cifrada = fecha_examen
