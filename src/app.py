@@ -15,6 +15,9 @@ app = Flask(__name__)
 
 conn = db.get_db_connection()
 
+clave = b'tu_clave_segura'  # Usa tu clave segura aquí
+fernet = Fernet(clave)
+
 @app.route("/")
 def index():
      return render_template('index.html')
@@ -74,14 +77,14 @@ def agregar_historia_clinica():
           alergia = request.form['alergia']
 
           # Encriptar los datos
-          nombre_cifrado = Fernet.encrypt(nombre.encode())
-          cedula_cifrada = Fernet.encrypt(cedula.encode())
-          fecha_nacimiento_cifrada = Fernet.encrypt(fecha_nacimiento.encode())
-          tipo_sangre_cifrado = Fernet.encrypt(tipo_sangre.encode())
-          fecha_examen_cifrada = Fernet.encrypt(fecha_examen.encode())
-          enfermedades_cifradas = Fernet.encrypt(enfermedades.encode())
-          medicamentos_cifrados = Fernet.encrypt(medicamentos.encode())
-          alergia_cifrada = Fernet.encrypt(alergia.encode())
+          nombre_cifrado = fernet.encrypt(nombre.encode())
+          cedula_cifrada = fernet.encrypt(cedula.encode())
+          fecha_nacimiento_cifrada = fernet.encrypt(fecha_nacimiento.encode())
+          tipo_sangre_cifrado = fernet.encrypt(tipo_sangre.encode())
+          fecha_examen_cifrada = fernet.encrypt(fecha_examen.encode())
+          enfermedades_cifradas = fernet.encrypt(enfermedades.encode())
+          medicamentos_cifrados = fernet.encrypt(medicamentos.encode())
+          alergia_cifrada = fernet.encrypt(alergia.encode())
 
           # Insertar en la base de datos
           conn = db.get_db_connection()
