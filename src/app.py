@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash
+from flask import Flask, redirect, render_template, request, flash, url_for
 from config import config 
 from database import db
 import psycopg2.extras
@@ -94,6 +94,7 @@ def agregar_historia_clinica():
                          (nombre_cifrado, cedula_cifrada, fecha_nacimiento_cifrada, tipo_sangre_cifrado, fecha_examen_cifrada, enfermedades_cifradas, medicamentos_cifrados, alergia_cifrada))
           conn.commit()
           conn.close()
+          return redirect(url_for('agregar_historia_clinica'))
      url ='http://34.160.204.45:80/api/historias-clinicas'
      response = requests.get(url)
      data = response.json()
