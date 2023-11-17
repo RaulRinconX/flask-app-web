@@ -15,7 +15,7 @@ app = Flask(__name__)
 
 conn = db.get_db_connection()
 
-clave = b'tu_clave_segura'  # Usa tu clave segura aquí
+clave = b'K1ncH8Wws87y3JcwSSpcD9Ot_61a33IV4qNeQgZ9IfU='  # Usa tu clave segura aquí
 fernet = Fernet(clave)
 
 @app.route("/")
