@@ -37,6 +37,7 @@ auth0 = oauth.register(
     client_kwargs={
         'scope': 'openid profile email',
     }, client_id=os.getenv('AUTH0_CLIENT_ID'),
+     jwks_uri='https://' + os.getenv('AUTH0_DOMAIN') + '/.well-known/jwks.json',
     
 )
 
@@ -104,6 +105,7 @@ def show_signup_form():
                     cursor.execute("INSERT INTO paciente (nombre, apellido, correo_electronico, identificacion, fecha_nacimiento, grupo_sanguineo, activo, contraseña_hash, contraseña_salt, historia_medica) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (name, lastname, email, cedula, birthdate, bloodtype, True, hashed_password, hashed_password, 1))
                     conn.commit()
                     flash('You have successfully registered')
+                    return redirect(url_for('iniciar_sesion'))
                except psycopg2.errors.UniqueViolation:
                     flash("Account already exists! Please log in.")
           else:
@@ -127,7 +129,7 @@ def iniciar_sesion():
 def health():
     return "OK!"
 
-@app.route('/callback')
+@app.route('/callback/')
 def callback_handling():
      # Maneja la respuesta de autenticación de Auth0
      auth0.authorize_access_token()
