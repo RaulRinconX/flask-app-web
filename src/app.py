@@ -172,7 +172,7 @@ def callback_handling():
           pass
 
 
-     return redirect(url_for('historias-clinicas'))
+     return redirect(url_for('agregar_historia_clinica'))
 
 
 @app.route("/historias-clinicas/", methods=["GET","POST"])
