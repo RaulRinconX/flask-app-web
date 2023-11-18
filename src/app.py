@@ -46,7 +46,7 @@ def requires_auth_role(role):
         @wraps(f)
         def decorated(*args, **kwargs):
             if 'profile' not in session or (role not in session.get('roles', [])):
-                return redirect(url_for('iniciar_sesion'))
+                return redirect(url_for('index'))
             return f(*args, **kwargs)
         return decorated
     return requires_role_decorator
@@ -179,7 +179,7 @@ def callback_handling():
 
 
 @app.route("/historias-clinicas/", methods=["GET","POST"])
-@requires_auth_role('rol_jfbqTMW0L2eSOGK6')
+@requires_auth_role('Doctor')
 def agregar_historia_clinica():
      if request.method == 'POST' and 'nombre' in request.form and 'cedula' in request.form and 'fecha_nacimiento' in request.form and 'tipo_sangre' in request.form and 'fecha_examen' in request.form and 'enfermedades' in request.form and 'medicamentos' in request.form and 'alergia' in request.form:
           # Obtener datos del formulario
