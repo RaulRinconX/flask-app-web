@@ -35,9 +35,9 @@ auth0 = oauth.register(
     'auth0',
     client_id=os.getenv('AUTH0_CLIENT_ID'),
     client_secret=os.getenv('AUTH0_CLIENT_SECRET'),
-    api_base_url=os.getenv('AUTH0_DOMAIN'),
-    access_token_url=os.getenv('AUTH0_DOMAIN') + '/oauth/token',
-    authorize_url=os.getenv('AUTH0_DOMAIN') + '/authorize',
+    api_base_url='https://' + os.getenv('AUTH0_DOMAIN'),
+    access_token_url= 'https://' + os.getenv('AUTH0_DOMAIN') + '/oauth/token',
+    authorize_url= 'https://' + os.getenv('AUTH0_DOMAIN') + '/authorize',
     client_kwargs={
         'scope': 'openid profile email',
     },
