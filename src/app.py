@@ -86,7 +86,7 @@ def show_signup_form():
 #      return render_template('auth/login.html')
 
 @app.route('/login')
-def login():
+def iniciar_sesion():
     return auth0.authorize_redirect(redirect_uri=os.getenv('AUTH0_CALLBACK_URL'))
 
 
