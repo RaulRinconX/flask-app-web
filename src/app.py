@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 import os
 
 from routes import historias, citas
+from urllib.parse import urlencode
 
 
 
@@ -234,6 +235,17 @@ def agregar_historia_clinica():
 
      # Renderizar la plantilla con los datos desencriptados
      return render_template('auth/historias.html', json_data=historias)
+
+@app.route('/logout')
+def logout():
+     # Limpiar la sesión de Flask
+     session.clear()
+
+     # Crear la URL de logout de Auth0
+     params = {'returnTo': url_for('index', _external=True), 'client_id': os.getenv('AUTH0_CLIENT_ID')}
+     return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
+
+
 def page_not_found(error):
      return "<h1> Not found page :( </h1>",404
 
