@@ -12,12 +12,37 @@ from cryptography.fernet import Fernet, InvalidToken
 from routes import historias
 from routes import citas
 
+#Auth0
+from authlib.integrations.flask_client import OAuth
+from dotenv import load_dotenv
+import os
+
+
+
+
+
 app = Flask(__name__)
 
 conn = db.get_db_connection()
 
 clave = b'K1ncH8Wws87y3JcwSSpcD9Ot_61a33IV4qNeQgZ9IfU='  # Usa tu clave segura aquí
 fernet = Fernet(clave)
+
+load_dotenv()
+
+oauth = OAuth(app)
+auth0 = oauth.register(
+    'auth0',
+    client_id=os.getenv('AUTH0_CLIENT_ID'),
+    client_secret=os.getenv('AUTH0_CLIENT_SECRET'),
+    api_base_url=os.getenv('AUTH0_DOMAIN'),
+    access_token_url=os.getenv('AUTH0_DOMAIN') + '/oauth/token',
+    authorize_url=os.getenv('AUTH0_DOMAIN') + '/authorize',
+    client_kwargs={
+        'scope': 'openid profile email',
+    },
+)
+
 
 @app.route("/")
 def index():
@@ -56,9 +81,14 @@ def show_signup_form():
           flash('Please fill out the form')
      return render_template("auth/signup.html")
 
-@app.route("/login", methods=['GET', 'POST'])
-def iniciar_sesion():
-     return render_template('auth/login.html')
+# @app.route("/login", methods=['GET', 'POST'])
+# def iniciar_sesion():
+#      return render_template('auth/login.html')
+
+@app.route('/login')
+def login():
+    return auth0.authorize_redirect(redirect_uri=os.getenv('AUTH0_CALLBACK_URL'))
+
 
 @app.route("/health-check/")
 def health():
