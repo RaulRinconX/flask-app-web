@@ -8,7 +8,7 @@ body {
 .form-signin {
   max-width: 330px;
   padding: 1rem;
-  margin: 0 auto;
+  margin: 0 auto !important;
   height: 85%;
 }
 
@@ -39,5 +39,5 @@ body {
 
 .form-control {
   height: 50px;
-  padding: 0.5rem;
+  padding: 0.5rem !important;
 }
