@@ -172,7 +172,6 @@ def callback_handling():
      else:
           print(roles_response.json())
           print("Error getting roles from Auth0")
-          pass
 
 
      return redirect(url_for('agregar_historia_clinica'))

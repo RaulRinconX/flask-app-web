@@ -29,18 +29,35 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/login">Iniciar Sesión</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/signup">Registrarse</a>
-                        </li>
+                        {% if 'profile' not in session %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="/login">Iniciar Sesión</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/signup">Registrarse</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="/logout">Cerrar Sesión</a>
+                            </li>
+                            {% if 'Doctor' in session.get('roles', []) %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/historias-clinicas/">Historias Clínicas</a>
+                                </li>
+                            {% endif %}
+                        {% endif %}
                     </ul>
                 </div>
+
             </div>
         </nav>
     </header>
     {% block body %}
+    {% if 'profile' in session %}
+    <div class="container mt-4">
+        <h2>Hola {{ 'Doctor' if 'Doctor' in session.get('roles', []) else 'Paciente' }} {{ session['profile'].get('name', '') }}</h2>
+    </div>
+    {% endif %}
 
     {% endblock %}
     <footer class="bg-light text-center text-lg-start bg-dark">
