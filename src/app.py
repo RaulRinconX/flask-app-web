@@ -88,8 +88,9 @@ def show_signup_form():
           # Call Auth0 API to create user
           response = requests.post(f'https://{os.getenv("AUTH0_DOMAIN")}/api/v2/users', json=data,
                                    headers={'Authorization': f'Bearer {access_token}'})
-          
-          if response.status_code == 201:
+          print (response.status_code)
+          print(response.json())
+          if response.status_code == 201 or response.status_code == 200:
                # Call Auth0 API to create user
                try:
                     cursor.execute("INSERT INTO paciente (nombre, apellido, correo_electronico, identificacion, fecha_nacimiento, grupo_sanguineo, activo, contraseña_hash, contraseña_salt, historia_medica) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (name, lastname, email, cedula, birthdate, bloodtype, True, hashed_password, hashed_password, 1))
