@@ -1,3 +1,15 @@
+body {
+    min-height: 100vh;
+}
+
+.historias-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
 .center {
     margin: 0 auto;
 }
