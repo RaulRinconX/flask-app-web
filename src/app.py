@@ -80,6 +80,7 @@ def show_signup_form():
 
           if auth0_response.status_code != 200:
                flash('Error obtaining token from Auth0')
+               print(auth0_response.json())
                return render_template("auth/signup.html")
 
           access_token = auth0_response.json()['access_token']
