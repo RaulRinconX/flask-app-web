@@ -52,12 +52,12 @@
             </div>
         </nav>
     </header>
-    {% block body %}
     {% if 'profile' in session %}
     <div class="container mt-4">
         <h2>Hola {{ 'Doctor' if 'Doctor' in session.get('roles', []) else 'Paciente' }} {{ session['profile'].get('name', '') }}</h2>
     </div>
     {% endif %}
+    {% block body %}
 
     {% endblock %}
     <footer class="bg-light text-center text-lg-start bg-dark">
