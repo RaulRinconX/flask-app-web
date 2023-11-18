@@ -1,14 +1,15 @@
 html,
 body {
   height: 100%;
-  display: grid;
   place-items: center;
+  min-width: 100vh;
 }
 
 .form-signin {
   max-width: 330px;
   padding: 1rem;
   margin: 0 auto;
+  height: 85%;
 }
 
 .form-signin .form-floating:focus-within {

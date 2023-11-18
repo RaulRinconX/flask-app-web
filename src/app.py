@@ -175,7 +175,7 @@ def callback_handling():
           print("Error getting roles from Auth0")
 
 
-     return redirect(url_for('agregar_historia_clinica'))
+     return redirect(url_for('index'))
 
 
 @app.route("/historias-clinicas/", methods=["GET","POST"])

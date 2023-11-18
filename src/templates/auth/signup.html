@@ -8,14 +8,14 @@
 
 {% block body %}
 <form class="form-signin" action="/signup/" method="POST">
-    <h1 class="h3 mb-3 fw-normal">Please sign up</h1>
+    <h1 class="h3 mb-3 fw-normal">Por favor registrate</h1>
     <div class="form-floating">
       <input type="text" class="form-control" name="name" id="name" placeholder="Name">
-      <label for="name">Name</label>
+      <label for="name">Nombre</label>
     </div>
     <div class="form-floating">
       <input type="text" class="form-control" name="lastname" id="lastname" placeholder="Last name">
-      <label for="lastname">Last Name</label>
+      <label for="lastname">Apellido</label>
     </div>
     <div class="form-floating">
       <input type="text" class="form-control" name="cedula" id="cedula" placeholder="Cedula">
@@ -23,19 +23,19 @@
     </div>
     <div class="form-floating">
       <input type="date" class="form-control" name="birthdate" id="birthdate" placeholder="Birth date">
-      <label for="birthdate">Birth Date</label>
+      <label for="birthdate">Fecha de nacimiento</label>
     </div>
     <div class="form-floating">
       <input type="text" class="form-control" name="bloodtype" id="bloodtype" placeholder="Blood type">
-      <label for="bloodtype">Blood Type</label>
+      <label for="bloodtype">Tipo de sangre</label>
     </div>
     <div class="form-floating">
       <input type="email" class="form-control" name="email" id="email" placeholder="Email">
-      <label for="email">Email</label>
+      <label for="email">Correo electrónico</label>
     </div>
     <div class="form-floating">
       <input type="password" class="form-control" name="password" id="password" placeholder="Password">
-      <label for="password">Password</label>
+      <label for="password">Contraseña</label>
     </div>
     
     <div class="form-floating">
@@ -51,9 +51,9 @@
         {% endfor %}
         {% endif %}
         {% endwith %}
-       <input type="submit" value="Register" class="form-control btn btn-primary " name="">
+       <input type="submit" value="Registrarse" class="form-control btn btn-primary " name="">
        <p style="padding:5px;">
-       <a href="/login" class="btn btn-dark ">Login</a></p>
+       <a href="/login" class="btn btn-dark ">Iniciar Sesión</a></p>
         
       </div>
   </form>
