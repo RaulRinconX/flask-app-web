@@ -69,9 +69,7 @@ def show_signup_form():
                'connection': 'Username-Password-Authentication'  # Adjust as necessary
           }
 
-          # Call Auth0 API to create user
-          response = requests.post(f'https://{os.getenv("AUTH0_DOMAIN")}/api/v2/users', json=data,
-                                   headers={'Authorization': f'Bearer {os.getenv("AUTH0_CLIENT_SECRET")}'})
+          
 
           hashed_password = generate_password_hash(password)
           
@@ -85,6 +83,9 @@ def show_signup_form():
           elif not email or not password or not name or not lastname or not cedula or not birthdate or not bloodtype:
                flash('Please fill out the form')
           else:
+               # Call Auth0 API to create user
+               response = requests.post(f'https://{os.getenv("AUTH0_DOMAIN")}/api/v2/users', json=data,
+                                   headers={'Authorization': f'Bearer {os.getenv("AUTH0_CLIENT_SECRET")}'})
                cursor.execute("INSERT INTO paciente (nombre, apellido, correo_electronico, identificacion, fecha_nacimiento, grupo_sanguineo, activo, contraseña_hash, contraseña_salt, historia_medica) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (name, lastname, email, cedula, birthdate, bloodtype, True, hashed_password, hashed_password, 1))
                conn.commit()
                flash('You have successfully registered')
