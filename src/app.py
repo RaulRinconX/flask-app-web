@@ -1,4 +1,5 @@
-from flask import Flask, redirect, render_template, request, flash, url_for
+from flask import Flask, redirect, render_template, request, flash, url_for, session
+from functools import wraps
 from config import config 
 from database import db
 import psycopg2.extras
@@ -7,15 +8,11 @@ import requests
 import base64
 from werkzeug.security import generate_password_hash, check_password_hash
 from cryptography.fernet import Fernet, InvalidToken
-
-#Routes
-from routes import historias
-from routes import citas
-
-#Auth0
 from authlib.integrations.flask_client import OAuth
 from dotenv import load_dotenv
 import os
+
+from routes import historias, citas
 
 
 
@@ -42,6 +39,17 @@ auth0 = oauth.register(
     }, client_id=os.getenv('AUTH0_CLIENT_ID'),
     
 )
+
+def requires_auth_role(role):
+    def requires_role_decorator(f):
+        @wraps(f)
+        def decorated(*args, **kwargs):
+            if 'profile' not in session or (role not in session.get('roles', [])):
+                return redirect(url_for('iniciar_sesion'))
+            return f(*args, **kwargs)
+        return decorated
+    return requires_role_decorator
+
 
 
 @app.route("/")
@@ -119,7 +127,54 @@ def iniciar_sesion():
 def health():
     return "OK!"
 
+@app.route('/callback')
+def callback_handling():
+     # Maneja la respuesta de autenticación de Auth0
+     auth0.authorize_access_token()
+     resp = auth0.get('userinfo')
+     userinfo = resp.json()
+
+     # Establecer la sesión del usuario
+     session['jwt_payload'] = userinfo
+     session['profile'] = {
+          'user_id': userinfo['sub'],
+          'name': userinfo.get('name', ''),
+          'picture': userinfo.get('picture', '')
+     }
+
+     auth0_response = requests.post(f'https://{os.getenv("AUTH0_DOMAIN")}/oauth/token', json={
+               "client_id": os.getenv('AUTH0_CLIENT_ID'),
+               "client_secret": os.getenv('AUTH0_CLIENT_SECRET'),
+               "audience": f'https://{os.getenv("AUTH0_DOMAIN")}/api/v2/',
+               "grant_type": "client_credentials"
+          })
+
+     if auth0_response.status_code != 200:
+          flash('Error obtaining token from Auth0')
+          print(auth0_response.json())
+          return redirect(url_for('iniciar_sesion'))
+
+     access_token = auth0_response.json()['access_token']
+
+     user_id = userinfo['sub']
+     headers = {'Authorization': f'Bearer {access_token}'}
+     roles_url = f'https://{os.getenv("AUTH0_DOMAIN")}/api/v2/users/{user_id}/roles'
+     roles_response = requests.get(roles_url, headers=headers)
+
+     if roles_response.status_code == 200 or roles_response.status_code == 201:
+          roles_data = roles_response.json()
+          session['roles'] = [role['name'] for role in roles_data]
+     else:
+          print(roles_response.json())
+          print("Error getting roles from Auth0")
+          pass
+
+
+     return redirect(url_for('historias-clinicas'))
+
+
 @app.route("/historias-clinicas/", methods=["GET","POST"])
+@requires_auth_role('doctor')
 def agregar_historia_clinica():
      if request.method == 'POST' and 'nombre' in request.form and 'cedula' in request.form and 'fecha_nacimiento' in request.form and 'tipo_sangre' in request.form and 'fecha_examen' in request.form and 'enfermedades' in request.form and 'medicamentos' in request.form and 'alergia' in request.form:
           # Obtener datos del formulario
@@ -180,6 +235,12 @@ def page_not_found(error):
 
 def unauthorized(error):
      return "<h1> No tienes permisos >:( </h1>",401
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    params = {'returnTo': url_for('index', _external=True), 'client_id': os.getenv('AUTH0_CLIENT_ID')}
+    return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
 
 if __name__ == "__main__":
       app.config.from_object(config['development'])
