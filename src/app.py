@@ -174,7 +174,7 @@ def callback_handling():
 
 
 @app.route("/historias-clinicas/", methods=["GET","POST"])
-@requires_auth_role('doctor')
+@requires_auth_role('rol_jfbqTMW0L2eSOGK6')
 def agregar_historia_clinica():
      if request.method == 'POST' and 'nombre' in request.form and 'cedula' in request.form and 'fecha_nacimiento' in request.form and 'tipo_sangre' in request.form and 'fecha_examen' in request.form and 'enfermedades' in request.form and 'medicamentos' in request.form and 'alergia' in request.form:
           # Obtener datos del formulario
@@ -236,11 +236,6 @@ def page_not_found(error):
 def unauthorized(error):
      return "<h1> No tienes permisos >:( </h1>",401
 
-@app.route('/logout')
-def logout():
-    session.clear()
-    params = {'returnTo': url_for('index', _external=True), 'client_id': os.getenv('AUTH0_CLIENT_ID')}
-    return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
 
 if __name__ == "__main__":
       app.config.from_object(config['development'])
