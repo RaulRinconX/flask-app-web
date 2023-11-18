@@ -33,14 +33,14 @@ load_dotenv()
 oauth = OAuth(app)
 auth0 = oauth.register(
     'auth0',
-    client_id=os.getenv('AUTH0_CLIENT_ID'),
-    client_secret=os.getenv('AUTH0_CLIENT_SECRET'),
+   client_secret=os.getenv('AUTH0_CLIENT_SECRET'),
     api_base_url='https://' + os.getenv('AUTH0_DOMAIN'),
     access_token_url= 'https://' + os.getenv('AUTH0_DOMAIN') + '/oauth/token',
     authorize_url= 'https://' + os.getenv('AUTH0_DOMAIN') + '/authorize',
     client_kwargs={
         'scope': 'openid profile email',
-    },
+    }, client_id=os.getenv('AUTH0_CLIENT_ID'),
+    
 )
 
 
@@ -48,7 +48,7 @@ auth0 = oauth.register(
 def index():
      return render_template('index.html')
 
-@app.route("/signup/", methods=['GET', 'POST'])
+@app.route("/signup-complete/", methods=['GET', 'POST'])
 def show_signup_form():
 
      cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -61,6 +61,17 @@ def show_signup_form():
           bloodtype = request.form['bloodtype']
           email = request.form['email']
           password = request.form['password']
+
+          # Prepare data for Auth0 API
+          data = {
+               'email': email,
+               'password': password,
+               'connection': 'Username-Password-Authentication'  # Adjust as necessary
+          }
+
+          # Call Auth0 API to create user
+          response = requests.post(f'https://{os.getenv("AUTH0_DOMAIN")}/api/v2/users', json=data,
+                                   headers={'Authorization': f'Bearer {os.getenv("AUTH0_CLIENT_SECRET")}'})
 
           hashed_password = generate_password_hash(password)
           
