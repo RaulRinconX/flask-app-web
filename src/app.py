@@ -72,8 +72,8 @@ def show_signup_form():
           hashed_password = generate_password_hash(password)
 
           auth0_response = requests.post(f'https://{os.getenv("AUTH0_DOMAIN")}/oauth/token', json={
-               "client_id": "YOUR_CLIENT_ID",
-               "client_secret": "YOUR_CLIENT_SECRET",
+               "client_id": os.getenv('AUTH0_CLIENT_ID'),
+               "client_secret": os.getenv('AUTH0_CLIENT_SECRET'),
                "audience": f'https://{os.getenv("AUTH0_DOMAIN")}/api/v2/',
                "grant_type": "client_credentials"
           })
