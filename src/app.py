@@ -34,9 +34,9 @@ oauth = OAuth(app)
 auth0 = oauth.register(
     'auth0',
    client_secret=os.getenv('AUTH0_CLIENT_SECRET'),
-    api_base_url='https://' + os.getenv('AUTH0_DOMAIN'),
-    access_token_url= 'https://' + os.getenv('AUTH0_DOMAIN') + '/oauth/token',
-    authorize_url= 'https://' + os.getenv('AUTH0_DOMAIN') + '/authorize',
+    api_base_url='https://' + os.getenv("AUTH0_DOMAIN"),
+    access_token_url= 'https://' + os.getenv("AUTH0_DOMAIN") + '/oauth/token',
+    authorize_url= 'https://' + os.getenv("AUTH0_DOMAIN") + '/authorize',
     client_kwargs={
         'scope': 'openid profile email',
     }, client_id=os.getenv('AUTH0_CLIENT_ID'),
@@ -69,27 +69,37 @@ def show_signup_form():
                'connection': 'Username-Password-Authentication'  # Adjust as necessary
           }
 
-          
-
           hashed_password = generate_password_hash(password)
+
+          auth0_response = requests.post(f'https://{os.getenv("AUTH0_DOMAIN")}/oauth/token', json={
+               "client_id": "YOUR_CLIENT_ID",
+               "client_secret": "YOUR_CLIENT_SECRET",
+               "audience": f'https://{os.getenv("AUTH0_DOMAIN")}/api/v2/',
+               "grant_type": "client_credentials"
+          })
+
+          if auth0_response.status_code != 200:
+               flash('Error obtaining token from Auth0')
+               return render_template("auth/signup.html")
+
+          access_token = auth0_response.json()['access_token']
+
+          # Call Auth0 API to create user
+          response = requests.post(f'https://{os.getenv("AUTH0_DOMAIN")}/api/v2/users', json=data,
+                                   headers={'Authorization': f'Bearer {access_token}'})
           
-          cursor.execute('SELECT * FROM paciente WHERE correo_electronico = %s', (email,) )
-          account = cursor.fetchone()
-          print(account)
-          if account:
-               flash("Account already exists! Please log in.")
-          elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
-               flash('Invalid email address')
-          elif not email or not password or not name or not lastname or not cedula or not birthdate or not bloodtype:
-               flash('Please fill out the form')
-          else:
+          if response.status_code == 201:
                # Call Auth0 API to create user
-               response = requests.post(f'https://{os.getenv("AUTH0_DOMAIN")}/api/v2/users', json=data,
-                                   headers={'Authorization': f'Bearer {os.getenv("AUTH0_CLIENT_SECRET")}'})
-               print(response)
-               cursor.execute("INSERT INTO paciente (nombre, apellido, correo_electronico, identificacion, fecha_nacimiento, grupo_sanguineo, activo, contraseña_hash, contraseña_salt, historia_medica) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (name, lastname, email, cedula, birthdate, bloodtype, True, hashed_password, hashed_password, 1))
-               conn.commit()
-               flash('You have successfully registered')
+               try:
+                    cursor.execute("INSERT INTO paciente (nombre, apellido, correo_electronico, identificacion, fecha_nacimiento, grupo_sanguineo, activo, contraseña_hash, contraseña_salt, historia_medica) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (name, lastname, email, cedula, birthdate, bloodtype, True, hashed_password, hashed_password, 1))
+                    conn.commit()
+                    flash('You have successfully registered')
+               except psycopg2.errors.UniqueViolation:
+                    flash("Account already exists! Please log in.")
+          else:
+            # Handle Auth0 API error
+            flash('Error creating user in Auth0')
+
      elif request.method == 'POST':
           flash('Please fill out the form')
      return render_template("auth/signup.html")
