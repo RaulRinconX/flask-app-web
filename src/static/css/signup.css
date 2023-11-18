@@ -35,9 +35,12 @@ body {
   margin-top: 10px;
   text-align: center;
   width: 100%;
+  display: block;
 }
 
-.form-control {
+.form-control-submit {
   height: 50px;
   padding: 0.5rem !important;
+  background-color:#ea5058;
+  color : #333;
 }
