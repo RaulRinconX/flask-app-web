@@ -166,6 +166,9 @@ def callback_handling():
      if roles_response.status_code == 200 or roles_response.status_code == 201:
           roles_data = roles_response.json()
           session['roles'] = [role['name'] for role in roles_data]
+          print(session['roles'])
+          print("Roles obtenidos de Auth0")
+          print(roles_response.json())
      else:
           print(roles_response.json())
           print("Error getting roles from Auth0")
