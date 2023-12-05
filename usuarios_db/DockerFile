@@ -11,3 +11,4 @@ ENV POSTGRES_DB=usuarios_db
 
 # The default port for PostgreSQL is 5432
 EXPOSE 5432
+
