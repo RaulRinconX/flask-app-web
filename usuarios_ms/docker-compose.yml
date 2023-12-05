@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      SECRET_KEY: SECRET_KEY
+      DATABASE_URL: postgres://usuarios_ms:rasi@db:5432/usuarios_db
+      AUTH0_CLIENT_ID: 'ADExS2cKbGn4iKH4emUJnLW7aptcZHPx'
+      AUTH0_CLIENT_SECRET: '-HIfKrl5KNE8EGFGgCrLkpPfQUSlvjQjXcqvY6Ki625vM7-F7D0CyhZsODnha46D'
+      AUTH0_DOMAIN: 'rasimedical-auth.us.auth0.com'
+      AUTH0_CALLBACK_URL: 'http://34.160.204.45/usuarios/callback/'
+      AUTH0_AUDIENCE: ''
