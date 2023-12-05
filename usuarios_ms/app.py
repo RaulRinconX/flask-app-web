@@ -37,6 +37,11 @@ auth0 = oauth.register(
     jwks_uri='https://' + os.getenv('AUTH0_DOMAIN') + '/.well-known/jwks.json',
 )
 
+
+@app.route("/")
+def index():
+    return render_template('index.html')
+
 def requires_auth_role(role):
     def requires_role_decorator(f):
         @wraps(f)
