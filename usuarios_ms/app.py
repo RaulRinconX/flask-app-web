@@ -1,8 +1,9 @@
 from flask import Flask, redirect, render_template, request, flash, url_for, session
 from functools import wraps
+from psycopg2.errors import UniqueViolation
+import psycopg2.extras
 from config import config
 from database import db
-import psycopg2.extras
 import re
 import requests
 import base64
@@ -12,7 +13,6 @@ from dotenv import load_dotenv
 import os
 
 from urllib.parse import urlencode
-from psycopg2.errors import UniqueViolation
 
 
 
