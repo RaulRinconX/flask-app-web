@@ -99,7 +99,7 @@ def show_signup_form():
         if response.status_code == 201 or response.status_code == 200:
             # Call Auth0 API to create user
             try:
-                cursor.execute("INSERT INTO paciente (nombre, apellido, correo_electronico, identificacion, fecha_nacimiento, grupo_sanguineo, activo, contraseña_hash, contraseña_salt) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (name, lastname, email, cedula, birthdate, bloodtype, True, hashed_password, hashed_password))
+                cursor.execute("INSERT INTO paciente (nombre, apellido, correo_electronico, identificacion, fecha_nacimiento, grupo_sanguineo, activo, contraseña_hash, contraseña_salt) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)", (name, lastname, email, cedula, birthdate, bloodtype, True, hashed_password, hashed_password))
                 conn.commit()
                 flash('You have successfully registered')
                 return redirect(url_for('iniciar_sesion'))
