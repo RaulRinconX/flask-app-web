@@ -127,7 +127,7 @@ def iniciar_sesion():
 def health():
     return "OK!"
 
-@app.route('/callback/')
+@app.route('/callback')
 def callback_handling():
     # Maneja la respuesta de autenticación de Auth0
     auth0.authorize_access_token()
@@ -139,7 +139,7 @@ def callback_handling():
     session['profile'] = {
         'user_id': userinfo['sub'],
         'name': userinfo.get('name', ''),
-        'picture': userinfo.get('picture', '')
+        'picture': userinfo.get('picture', ''),
     }
 
     auth0_response = requests.post(f'https://{os.getenv("AUTH0_DOMAIN")}/oauth/token', json={
