@@ -1,10 +1,14 @@
 from fastapi import FastAPI, HTTPException, Request
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel
+from dotenv import load_dotenv
+
 import os
+
 
 app = FastAPI()
 
+load_dotenv()
 # MongoDB connection details
 MONGODB_URL = os.getenv("MONGODB_URL")
 DB_NAME = os.getenv("DB_NAME")
