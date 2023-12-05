@@ -53,7 +53,7 @@ def requires_auth_role(role):
     return requires_role_decorator
 
 
-@app.route("/signup/", methods=['GET', 'POST'])
+@app.route("/usuarios/signup/", methods=['GET', 'POST'])
 def show_signup_form():
 
     cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -118,16 +118,16 @@ def show_signup_form():
 # def iniciar_sesion():
 #      return render_template('auth/login.html')
 
-@app.route('/login')
+@app.route('/usarios/login')
 def iniciar_sesion():
     return auth0.authorize_redirect(redirect_uri=os.getenv('AUTH0_CALLBACK_URL'))
 
 
-@app.route("/health-check/")
+@app.route("/usuarios/health-check/")
 def health():
     return "OK!"
 
-@app.route('/callback/')
+@app.route('/usuarios/callback/')
 def callback_handling():
     # Maneja la respuesta de autenticación de Auth0
     auth0.authorize_access_token()
@@ -176,7 +176,7 @@ def callback_handling():
 
 
 
-@app.route('/logout')
+@app.route('/usuarios/logout')
 def logout():
     # Limpiar la sesión de Flask
     session.clear()
