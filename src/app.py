@@ -58,7 +58,7 @@ def requires_auth_role(role):
 def index():
      return render_template('index.html')
 
-@app.route("/signup/", methods=['GET', 'POST'])
+@app.route("/signup", methods=['GET', 'POST'])
 def show_signup_form():
 
      cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
