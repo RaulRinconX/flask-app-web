@@ -127,7 +127,7 @@ def iniciar_sesion():
 def health():
     return "OK!"
 
-@app.route('/callback')
+@app.route('/callback/')
 def callback_handling():
     # Maneja la respuesta de autenticación de Auth0
     auth0.authorize_access_token()
