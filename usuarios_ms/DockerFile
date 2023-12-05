@@ -6,7 +6,7 @@ FROM python:3.8-slim
 WORKDIR /usr/src/app
 
 # Copy the current directory contents into the container at /usr/src/app
-COPY ./usuarios_ms/ .
+COPY . .
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
@@ -28,3 +28,4 @@ ENV AUTH0_AUDIENCE = ''
 
 # Run app.py when the container launches
 CMD ["flask", "run", "--port=8080"]
+
