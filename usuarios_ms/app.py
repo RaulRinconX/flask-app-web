@@ -38,7 +38,7 @@ auth0 = oauth.register(
 )
 
 
-@app.route("/")
+@app.route("/usuarios")
 def index():
     return render_template('index.html')
 
