@@ -1,0 +1,44 @@
+* {
+    box-sizing: border-box;
+}
+
+.bg-dark {
+    background-color: #201a1a !important;
+}
+
+.bg {
+    background-color: #fffbff !important;
+}
+
+.on-dark-bg {
+    color: #fffbff !important;
+}
+
+.on-bg {
+    color: #201a1a !important;
+}
+
+html {
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    background-color: #fffbff;
+    color: #201a1a;
+}
+
+.navbar {
+    background: linear-gradient(0deg, #ddd 0%, #fffbff 100%);
+}
+
+.navbar .logo img {
+    height: 3rem;
+    width: auto;
+}
+
+.navbar .container-fluid {
+    margin: 0 auto;
+    justify-content: space-between;
+}
+
+.navbar-collapse {
+    flex-grow: 0;
+}
