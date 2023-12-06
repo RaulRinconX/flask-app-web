@@ -1,0 +1,9 @@
+.form-signin {
+  max-width: 480px;
+  padding: 1rem;
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

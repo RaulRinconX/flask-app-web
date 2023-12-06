@@ -1,0 +1,100 @@
+{% extends './base_template.html' %}
+
+{% block title %}HistoriasClinicas{% endblock %}
+
+{% block customCSS %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/historias.css') }}">
+{% endblock %}
+
+{% block body %}
+<body>
+  <div class="historias-container">
+  <h1>Historias Clínicas:</h1>
+
+  <!-- Botón para añadir nueva historia clínica -->
+  <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#formularioHistoriaClinica">
+    + Añadir Historia Clínica
+  </button>
+
+  <!-- Tabla de historias clínicas -->
+  <table class="center" id="pacientes-table">
+      <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Cédula</th>
+          <th>Tipo de Sangre</th>
+          <th>Fecha de Nacimiento</th>
+          <th>Fecha del Examen</th>
+          <th>Enfermedades</th>
+          <th>Medicamentos</th>
+          <th>Alergias</th>
+      </tr>
+      {% for paciente in json_data %}
+      <tr class="popup-trigger" data-id="{{ paciente.id }}">
+          <td>{{ paciente.id }}</td>
+          <td>{{ paciente.nombre }}</td>
+          <td>{{ paciente.cedula }}</td>
+          <td>{{ paciente.tipo_sangre }}</td>
+          <td>{{ paciente.fecha_nacimiento }}</td>
+          <td>{{ paciente.fecha_examen }}</td>
+          <td>{{ paciente.enfermedades }}</td>
+          <td>{{ paciente.medicamentos }}</td>
+          <td>{{ paciente.alergia }}</td>
+      </tr>
+      {% endfor %}
+  </table>
+
+  <!-- Modal para el formulario de historia clínica -->
+  <div class="modal fade" id="formularioHistoriaClinica" tabindex="-1" aria-labelledby="formularioHistoriaClinicaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="formularioHistoriaClinicaLabel">Nueva Historia Clínica</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Formulario -->
+          <form id="nuevaHistoriaClinica" action="/historias/" method="POST">
+            <div class="mb-3">
+              <label for="nombre" class="form-label">Nombre</label>
+              <input type="text" class="form-control" id="nombre" name="nombre">
+            </div>
+            <div class="mb-3">
+              <label for="cedula" class="form-label">Cédula</label>
+              <input type="text" class="form-control" id="cedula" name="cedula">
+            </div>
+            <div class="mb-3">
+              <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento</label>
+              <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento">
+            </div>
+            <div class="mb-3">
+              <label for="tipo_sangre" class="form-label">Tipo de Sangre</label>
+              <input type="text" class="form-control" id="tipo_sangre" name="tipo_sangre">
+            </div>
+            <div class="mb-3">
+              <label for="fecha_examen" class="form-label">Fecha del Examen</label>
+              <input type="date" class="form-control" id="fecha_examen" name="fecha_examen">
+            </div>
+            <div class="mb-3">
+              <label for="enfermedades" class="form-label">Enfermedades</label>
+              <textarea class="form-control" id="enfermedades" name="enfermedades"></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="medicamentos" class="form-label">Medicamentos</label>
+              <textarea class="form-control" id="medicamentos" name="medicamentos"></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="alergia" class="form-label">Alergias</label>
+              <textarea class="form-control" id="alergia" name="alergia"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+{% endblock %}
+
+
