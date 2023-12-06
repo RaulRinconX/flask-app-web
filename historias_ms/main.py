@@ -35,7 +35,7 @@ async def verificar_ip(request: Request, call_next):
                 <body>
                     <h1>Acceso Denegado</h1>
                     <p>No tienes permiso para acceder a esta página.</p>
-                    <p><a href="/">Volver a la página de inicio</a></p>
+                    <p><a href="/usuarios">Volver a la página de inicio</a></p>
                 </body>
             </html>
         """
