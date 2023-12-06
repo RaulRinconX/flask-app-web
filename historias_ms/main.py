@@ -88,7 +88,7 @@ async def verify_jwt(token: str):
 # retorna la información del usuario actual
 @app.get("/historias-clinicas/me")
 async def get_current_user_role(request: Request):
-    auth_header = request.headers.get('Authorization')
+    auth_header = request.headers.get('Cookie')
     if not auth_header:
         raise HTTPException(status_code=401, detail="Authorization header missing")
 
