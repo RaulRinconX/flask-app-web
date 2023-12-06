@@ -23,7 +23,7 @@ db = client[DB_NAME]
 
 
 
-IPs_PERMITIDAS = ["34.31.133.98", "35.193.63.36", "186.154.190.54"]  # Añade aquí la IP del microservicio de usuarios
+IPs_PERMITIDAS = ["34.31.133.98"]  # Añade aquí la IP del microservicio de usuarios
 
 @app.middleware("http")
 async def verificar_ip(request: Request, call_next):
