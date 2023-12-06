@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, HTMLResponse
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel
 from dotenv import load_dotenv
@@ -27,7 +27,19 @@ IPs_PERMITIDAS = ["34.31.133.98"]  # Añade aquí la IP del microservicio de usu
 async def verificar_ip(request: Request, call_next):
     ip_cliente = request.client.host
     if ip_cliente not in IPs_PERMITIDAS:
-        raise HTTPException(status_code=403, detail="Acceso no autorizado")
+        # Devolver una respuesta HTML que indique que el acceso no está permitido
+        contenido_html = """
+            <html>
+                <head><title>Acceso Denegado</title></head>
+                <body>
+                    <h1>Acceso Denegado</h1>
+                    <p>No tienes permiso para acceder a esta página.</p>
+                    <p><a href="/">Volver a la página de inicio</a></p>
+                </body>
+            </html>
+        """
+        return HTMLResponse(content=contenido_html, status_code=403)
+
     return await call_next(request)
 
 class HistoriaClinica(BaseModel):
