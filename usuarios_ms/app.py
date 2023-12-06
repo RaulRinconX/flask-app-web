@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, request, flash, url_for, session
+from flask import Flask, redirect, render_template, request, flash, url_for, session, make_response
 from functools import wraps
 from psycopg2.errors import UniqueViolation
 import psycopg2.extras
@@ -133,6 +133,8 @@ def callback_handling():
     auth0.authorize_access_token()
     resp = auth0.get('userinfo')
     userinfo = resp.json()
+    print(userinfo)
+    print("Userinfo obtenido de Auth0")
 
     # Establecer la sesión del usuario
     session['jwt_payload'] = userinfo
@@ -172,7 +174,13 @@ def callback_handling():
         print("Error getting roles from Auth0")
 
 
-    return redirect(url_for('index'))
+    response = make_response(redirect(url_for('index')))
+
+
+    # Setear el JWT en una cookie
+    response.set_cookie('jwt', access_token)
+
+    return response
 
 
 
