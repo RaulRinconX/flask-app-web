@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, request, flash, url_for, session
+from flask import Flask, redirect, render_template, request, flash, url_for, session, make_response
 from functools import wraps
 from psycopg2.errors import UniqueViolation
 import psycopg2.extras
@@ -171,9 +171,10 @@ def callback_handling():
         print(roles_response.json())
         print("Error getting roles from Auth0")
 
-
-    return redirect(url_for('index'))
-
+    response = make_response(redirect(url_for('index')))
+    # le pasa los roles a fastapi, de manera segura
+    response.set_cookie('session_id', session['roles'][0], httponly=True, samesite='Lax')
+    return response
 
 
 @app.route('/logout')
