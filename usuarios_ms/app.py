@@ -173,7 +173,7 @@ def callback_handling():
 
     response = make_response(redirect(url_for('index')))
     # le pasa los roles a fastapi, de manera segura
-    response.set_cookie('session_id', session['roles'][0], httponly=True, samesite='Lax')
+    response.set_cookie('session_id', session['roles'], httponly=True, samesite='Lax')
     return response
 
 
