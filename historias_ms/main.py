@@ -61,7 +61,7 @@ async def agregar_historia_clinica(historia: HistoriaClinica):
     return {"message": "Historia Clínica added"}
 
 @app.get("/historias-clinicas-api/")
-async def obtener_historias_clinicas():
-    historias = await db.historias.find()
+def obtener_historias_clinicas():
+    historias = db.historias.find()
     return historias
 
