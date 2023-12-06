@@ -1,9 +1,12 @@
-from fastapi import FastAPI, HTTPException, Request, Cookie
+from fastapi import FastAPI, HTTPException, Request
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel
+from jose import jwt, jwk, jws
+from jose.utils import base64url_decode
 from dotenv import load_dotenv
 
 import os
+import httpx
 
 
 app = FastAPI()
@@ -30,25 +33,65 @@ class HistoriaClinica(BaseModel):
 
 
 
+
 @app.post("/historias-clinicas/")
-async def agregar_historia_clinica(historia: HistoriaClinica, session_id: str = Cookie(None)):
-    if session_id and es_sesion_valida(session_id):
-        await db.historias.insert_one(historia.dict())
-        return {"message": "Historia Clínica added"}
-    return {"message": "Acceso denegado", "status": 401}
+async def agregar_historia_clinica(historia: HistoriaClinica):
+    await db.historias.insert_one(historia.dict())
+    return {"message": "Historia Clínica added"}
 
 @app.get("/historias-clinicas/{cedula}")
-async def leer_historia_clinica(cedula: str,  session_id: str = Cookie(None)):
-    if session_id and es_sesion_valida(session_id):
-        historia = await db.historias.find_one({"cedula": cedula})
-        if historia:
-            # Convertir ObjectId a string
-            historia['_id'] = str(historia['_id'])
-            return historia
-        raise HTTPException(status_code=404, detail=f"Historia Clínica not found for cedula {cedula}")
-    return {"message": "Acceso denegado", "status": 401}
+async def leer_historia_clinica(cedula: str):
+    historia = await db.historias.find_one({"cedula": cedula})
+    if historia:
+        # Convertir ObjectId a string
+        historia['_id'] = str(historia['_id'])
+        return historia
+    raise HTTPException(status_code=404, detail=f"Historia Clínica not found for cedula {cedula}")
 
 
-def es_sesion_valida(session_id: str):
-    print(session_id)
-    return True
+
+async def get_jwks():
+    jwks_url = f'https://{os.getenv("AUTH0_DOMAIN")}/.well-known/jwks.json'
+    resp = httpx.get(jwks_url)
+    return resp.json()
+
+async def verify_jwt(token: str):
+    jwks = await get_jwks()
+    unverified_header = jwt.get_unverified_header(token)
+
+    rsa_key = {}
+    for key in jwks["keys"]:
+        if key["kid"] == unverified_header["kid"]:
+            rsa_key = {
+                "kty": key["kty"],
+                "kid": key["kid"],
+                "use": key["use"],
+                "n": key["n"],
+                "e": key["e"]
+            }
+    if rsa_key:
+        try:
+            payload = jwt.decode(
+                token,
+                jwk.construct(rsa_key),
+                algorithms=["RS256"],
+                audience=os.getenv("AUTH0_AUDIENCE"),
+                issuer=f'https://{os.getenv("AUTH0_DOMAIN")}/'
+            )
+            return payload
+        except jwt.JWTError:
+            raise HTTPException(status_code=401, detail="Error verifying JWT token")
+
+    raise HTTPException(status_code=401, detail="Unable to find appropriate key")
+
+
+# retorna la información del usuario actual
+@app.get("/historias-clinicas/me")
+async def get_current_user_role(request: Request):
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        raise HTTPException(status_code=401, detail="Authorization header missing")
+
+    token = auth_header.split(" ")[1]
+    payload = await verify_jwt(token)
+    return payload
