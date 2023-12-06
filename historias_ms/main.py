@@ -37,6 +37,8 @@ async def agregar_historia_clinica(historia: HistoriaClinica):
 async def leer_historia_clinica(cedula: str):
     historia = await db.historias.find_one({"cedula": cedula})
     if historia:
+        # Convertir ObjectId a string
+        historia['_id'] = str(historia['_id'])
         return historia
     raise HTTPException(status_code=404, detail=f"Historia Clínica not found for cedula {cedula}")
 
