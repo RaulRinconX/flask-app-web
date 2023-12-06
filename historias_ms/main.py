@@ -102,8 +102,5 @@ secret_key = "SECRET_KEY"  # La misma clave que usas en Flask
 
 def decode_flask_cookie(cookie_value):
     serializer = URLSafeTimedSerializer(secret_key)
-    try:
-        data = serializer.loads(cookie_value)
-    except Exception as e:
-        raise HTTPException(status_code=401, detail="Invalid cookie")
+    data = serializer.loads(cookie_value)
     return data
