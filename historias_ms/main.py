@@ -22,19 +22,20 @@ db = client[DB_NAME]
 
 
 
-IPs_PERMITIDAS = ["34.31.133.98"]  # Añade aquí la IP del microservicio de usuarios
+IPs_PERMITIDAS = ["34.31.133.98", "35.193.63.36"]  # Añade aquí la IP del microservicio de usuarios
 
 @app.middleware("http")
 async def verificar_ip(request: Request, call_next):
     ip_cliente = request.client.host
     if ip_cliente not in IPs_PERMITIDAS:
         # Devolver una respuesta HTML que indique que el acceso no está permitido
-        contenido_html = """
+        contenido_html = f"""
             <html>
                 <head><title>Acceso Denegado</title></head>
                 <body>
                     <h1>Acceso Denegado</h1>
                     <p>No tienes permiso para acceder a esta página.</p>
+                    <p>{ip_cliente}</p>
                     <p><a href="/usuarios">Volver a la página de inicio</a></p>
                 </body>
             </html>
