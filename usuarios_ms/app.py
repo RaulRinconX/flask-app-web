@@ -190,7 +190,7 @@ def logout():
     params = {'returnTo': url_for('index', _external=True), 'client_id': os.getenv('AUTH0_CLIENT_ID')}
     return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
 
-@app.route("/historias-clinicas/", methods=["GET","POST"])
+@app.route("/historias/", methods=["GET","POST"])
 @requires_auth_role('Doctor')
 def agregar_historia_clinica():
     
