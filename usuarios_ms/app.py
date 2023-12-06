@@ -171,10 +171,7 @@ def callback_handling():
         print(roles_response.json())
         print("Error getting roles from Auth0")
 
-    response = make_response(redirect(url_for('index')))
-    # le pasa los roles a fastapi, de manera segura
-    response.set_cookie('session_id', session['roles'], httponly=True, samesite='Lax')
-    return response
+    return redirect(url_for('index'))
 
 
 @app.route('/logout')
