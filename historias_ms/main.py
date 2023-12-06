@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from jose import jwt, jwk, jws
 from jose.utils import base64url_decode
 from dotenv import load_dotenv
+from itsdangerous import URLSafeTimedSerializer
 
 import os
 import httpx
@@ -92,4 +93,17 @@ async def get_current_user_role(request: Request):
     if not auth_header:
         raise HTTPException(status_code=401, detail="Authorization header missing")
     print(auth_header)
-    return auth_header
+    auth_header = auth_header.split('=')[1]
+    token = decode_flask_cookie(auth_header)
+    print(token)
+    return token
+
+secret_key = "SECRET_KEY"  # La misma clave que usas en Flask
+
+def decode_flask_cookie(cookie_value):
+    serializer = URLSafeTimedSerializer(secret_key)
+    try:
+        data = serializer.loads(cookie_value)
+    except Exception as e:
+        raise HTTPException(status_code=401, detail="Invalid cookie")
+    return data
