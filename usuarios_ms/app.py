@@ -12,6 +12,8 @@ from authlib.integrations.flask_client import OAuth
 from dotenv import load_dotenv
 import os
 
+from cryptography.fernet import Fernet, InvalidToken
+
 from urllib.parse import urlencode
 
 
@@ -23,6 +25,11 @@ app = Flask(__name__)
 conn = db.get_db_connection()
 
 load_dotenv()
+
+
+clave = b'K1ncH8Wws87y3JcwSSpcD9Ot_61a33IV4qNeQgZ9IfU='  # Usa tu clave segura aquí
+fernet = Fernet(clave)
+
 
 oauth = OAuth(app)
 auth0 = oauth.register(
@@ -182,6 +189,86 @@ def logout():
     # Crear la URL de logout de Auth0
     params = {'returnTo': url_for('index', _external=True), 'client_id': os.getenv('AUTH0_CLIENT_ID')}
     return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
+
+@app.route("/historias/", methods=["GET","POST"])
+@requires_auth_role('Doctor')
+def agregar_historia_clinica():
+    
+    # URL del microservicio FastAPI
+    url_microservicio = "http://35.193.63.36:8000/historias-clinicas/api"
+    if request.method == 'POST' and 'nombre' in request.form and 'cedula' in request.form and 'fecha_nacimiento' in request.form and 'tipo_sangre' in request.form and 'fecha_examen' in request.form and 'enfermedades' in request.form and 'medicamentos' in request.form and 'alergia' in request.form:
+        # Obtener datos del formulario
+        nombre = request.form['nombre']
+        cedula = request.form['cedula']
+        fecha_nacimiento = request.form['fecha_nacimiento']
+        tipo_sangre = request.form['tipo_sangre']
+        fecha_examen = request.form['fecha_examen']
+        enfermedades = request.form['enfermedades']
+        medicamentos = request.form['medicamentos']
+        alergia = request.form['alergia']
+
+        # Encriptar los datos
+        nombre_cifrado = base64.urlsafe_b64encode(fernet.encrypt(nombre.encode())).decode('utf-8')
+        cedula_cifrada = base64.urlsafe_b64encode(fernet.encrypt(cedula.encode())).decode('utf-8')
+        fecha_nacimiento_cifrada = fecha_nacimiento
+        tipo_sangre_cifrado = base64.urlsafe_b64encode(fernet.encrypt(tipo_sangre.encode())).decode('utf-8')
+        fecha_examen_cifrada = fecha_examen
+        enfermedades_cifradas = base64.urlsafe_b64encode(fernet.encrypt(enfermedades.encode())).decode('utf-8')
+        medicamentos_cifrados = base64.urlsafe_b64encode(fernet.encrypt(medicamentos.encode())).decode('utf-8')
+        alergia_cifrada = base64.urlsafe_b64encode(fernet.encrypt(alergia.encode())).decode('utf-8')
+
+        # llamar al microservicio de historias clinicas
+
+        datos_historia_clinica = {
+            "nombre": nombre_cifrado,
+            "cedula": cedula_cifrada,
+            "fecha_nacimiento": fecha_nacimiento_cifrada,
+            "tipo_sangre": tipo_sangre_cifrado,
+            "fecha_examen": fecha_examen_cifrada,
+            "enfermedades": enfermedades_cifradas,
+            "medicamentos": medicamentos_cifrados,
+            "alergia": alergia_cifrada
+        }
+
+
+        # Enviar solicitud POST al microservicio
+        respuesta = requests.post(url_microservicio, json=datos_historia_clinica)
+
+        # Verificar respuesta del microservicio
+        if respuesta.status_code == 200:
+            flash("Historia clínica agregada con éxito.")
+        else:
+            flash("Error al agregar la historia clínica.")
+
+        return redirect(url_for('agregar_historia_clinica'))
+
+    response = requests.get(url_microservicio)
+
+    historias_cifradas = response.json()
+    # Desencriptar los datos
+    historias = []
+    for historia_cifrada in historias_cifradas:
+        try:
+            historia = {
+                'nombre': fernet.decrypt(base64.urlsafe_b64decode(historia_cifrada['nombre'])).decode('utf-8'),
+                'cedula': fernet.decrypt(base64.urlsafe_b64decode(historia_cifrada['cedula'])).decode('utf-8'),
+                'fecha_nacimiento': historia_cifrada['fecha_nacimiento'],  # Suponiendo que esta no está cifrada
+                'tipo_sangre': fernet.decrypt(base64.urlsafe_b64decode(historia_cifrada['tipo_sangre'])).decode('utf-8'),
+                'fecha_examen': historia_cifrada['fecha_examen'],  # Suponiendo que esta no está cifrada
+                'enfermedades': fernet.decrypt(base64.urlsafe_b64decode(historia_cifrada['enfermedades'])).decode('utf-8'),
+                'medicamentos': fernet.decrypt(base64.urlsafe_b64decode(historia_cifrada['medicamentos'])).decode('utf-8'),
+                'alergia': fernet.decrypt(base64.urlsafe_b64decode(historia_cifrada['alergia'])).decode('utf-8')
+            }
+            historias.append(historia)
+        except (InvalidToken, TypeError, base64.binascii.Error):
+            # Manejar el error si la desencriptación falla
+            # Esto puede suceder si el token es inválido o si los datos no están correctamente codificados en base64
+            pass
+
+    # Renderizar la plantilla con los datos desencriptados
+    return render_template('historias.html', json_data=historias)
+
+
 
 
 def page_not_found(error):
