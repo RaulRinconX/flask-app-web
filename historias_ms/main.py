@@ -92,5 +92,6 @@ async def get_current_user_role(request: Request):
     if not auth_header:
         raise HTTPException(status_code=401, detail="Authorization header missing")
 
-    print(auth_header)
-    return auth_header
+    token = auth_header.split("=")[1]
+    payload = await verify_jwt(token)
+    return payload
