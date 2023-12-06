@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, Cookie
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel
 from dotenv import load_dotenv
@@ -28,17 +28,27 @@ class HistoriaClinica(BaseModel):
     medicamentos: str
     alergia: str
 
+
+
 @app.post("/historias-clinicas/")
-async def agregar_historia_clinica(historia: HistoriaClinica):
-    await db.historias.insert_one(historia.dict())
-    return {"message": "Historia Clínica added"}
+async def agregar_historia_clinica(historia: HistoriaClinica, session_id: str = Cookie(None)):
+    if session_id and es_sesion_valida(session_id):
+        await db.historias.insert_one(historia.dict())
+        return {"message": "Historia Clínica added"}
+    return {"message": "Acceso denegado", "status": 401}
 
 @app.get("/historias-clinicas/{cedula}")
-async def leer_historia_clinica(cedula: str):
-    historia = await db.historias.find_one({"cedula": cedula})
-    if historia:
-        # Convertir ObjectId a string
-        historia['_id'] = str(historia['_id'])
-        return historia
-    raise HTTPException(status_code=404, detail=f"Historia Clínica not found for cedula {cedula}")
+async def leer_historia_clinica(cedula: str,  session_id: str = Cookie(None)):
+    if session_id and es_sesion_valida(session_id):
+        historia = await db.historias.find_one({"cedula": cedula})
+        if historia:
+            # Convertir ObjectId a string
+            historia['_id'] = str(historia['_id'])
+            return historia
+        raise HTTPException(status_code=404, detail=f"Historia Clínica not found for cedula {cedula}")
+    return {"message": "Acceso denegado", "status": 401}
 
+
+def es_sesion_valida(session_id: str):
+    print(session_id)
+    return True
