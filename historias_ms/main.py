@@ -40,15 +40,3 @@ async def leer_historia_clinica(cedula: str):
         return historia
     raise HTTPException(status_code=404, detail=f"Historia Clínica not found for cedula {cedula}")
 
-print(agregar_historia_clinica({
-    "nombre": "Aykut",
-    "cedula": "123456789",
-    "fecha_nacimiento": "12/12/12",
-    "tipo_sangre": "O+",
-    "fecha_examen": "12/12/12",
-    "enfermedades": "Ninguna",
-    "medicamentos": "Ninguno",
-    "alergia": "Ninguna"
-}))
-
-
