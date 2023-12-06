@@ -41,12 +41,12 @@ class HistoriaClinica(BaseModel):
     alergia: str
 
 
-@app.post("/historias-clinicas/api")
+@app.post("/historias-clinicas-api/")
 async def agregar_historia_clinica(historia: HistoriaClinica):
     await db.historias.insert_one(historia.dict())
     return {"message": "Historia Clínica added"}
 
-@app.get("/historias-clinicas/api")
+@app.get("/historias-clinicas-api/")
 async def obtener_historias_clinicas():
     historias = await db.historias.find().to_list(1000)
     return historias
