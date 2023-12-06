@@ -62,9 +62,9 @@ async def agregar_historia_clinica(historia: HistoriaClinica):
     return {"message": "Historia Clínica added"}
 
 @app.get("/historias-clinicas-api/")
-def obtener_historias_clinicas():
+async def obtener_historias_clinicas():
     historias_cursor = db.historias.find()
-    historias_lista = list(historias_cursor)
-    # Convertir los documentos BSON a JSON
+    historias_lista = [documento async for documento in historias_cursor]
     historias_json = json.loads(json_util.dumps(historias_lista))
     return historias_json
+
