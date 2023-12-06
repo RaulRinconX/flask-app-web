@@ -3,7 +3,8 @@ from fastapi.responses import HTMLResponse
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel
 from dotenv import load_dotenv
-
+from bson import json_util
+import json
 
 import os
 
@@ -25,7 +26,7 @@ db = client[DB_NAME]
 IPs_PERMITIDAS = ["34.31.133.98", "35.193.63.36", "186.154.190.54"]  # Añade aquí la IP del microservicio de usuarios
 
 @app.middleware("http")
-def verificar_ip(request: Request, call_next):
+async def verificar_ip(request: Request, call_next):
     ip_cliente = request.client.host
     if ip_cliente not in IPs_PERMITIDAS:
         # Devolver una respuesta HTML que indique que el acceso no está permitido
@@ -42,7 +43,7 @@ def verificar_ip(request: Request, call_next):
         """
         return HTMLResponse(content=contenido_html, status_code=403)
 
-    return call_next(request)
+    return await call_next(request)
 
 class HistoriaClinica(BaseModel):
     nombre: str
@@ -62,6 +63,8 @@ async def agregar_historia_clinica(historia: HistoriaClinica):
 
 @app.get("/historias-clinicas-api/")
 def obtener_historias_clinicas():
-    historias = db.historias.find()
-    return historias
-
+    historias_cursor = db.historias.find()
+    historias_lista = list(historias_cursor)
+    # Convertir los documentos BSON a JSON
+    historias_json = json.loads(json_util.dumps(historias_lista))
+    return historias_json
