@@ -22,7 +22,7 @@ db = client[DB_NAME]
 
 
 
-IPs_PERMITIDAS = ["34.31.133.98", "35.193.63.36"]  # Añade aquí la IP del microservicio de usuarios
+IPs_PERMITIDAS = ["34.31.133.98", "35.193.63.36", "186.154.190.54"]  # Añade aquí la IP del microservicio de usuarios
 
 @app.middleware("http")
 async def verificar_ip(request: Request, call_next):
@@ -62,6 +62,6 @@ async def agregar_historia_clinica(historia: HistoriaClinica):
 
 @app.get("/historias-clinicas-api/")
 async def obtener_historias_clinicas():
-    historias = await db.historias.find().to_list(1000)
+    historias = await db.historias.find()
     return historias
 
